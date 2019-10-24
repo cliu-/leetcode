@@ -1,0 +1,90 @@
+Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+
+Example 1:
+
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+Example 2:
+
+Input: "cbbd"
+Output: "bb"
+
+def longestPalindrome(s):
+    ans,visited=[s[0]],set()
+    def backtracing(s):
+        if not s or s in visited: return
+        if s==s[::-1] and len(s) > len(ans[0]):
+            ans[0]=s
+        for i in range(1,len(s)):
+            if i>1: backtracing(s[:i])
+            if i<len(s)-1: backtracing(s[i:])
+        visited.add(s)
+    backtracing(s)
+    return ans[0]
+
+def longestPalindrome(s):
+    if not s or len(s)==1: return s
+    dp,ans=[[False]*len(s) for _ in range(len(s))],[s[0]]
+    for i in range(len(s)): dp[i][i]=True
+    for l in range(1, len(s)):
+        si,ei=0,l
+        while ei<len(s):
+            if s[si]==s[ei]:
+                if l==1:
+                    dp[si][ei]=True
+                else:
+                    dp[si][ei]=dp[si+1][ei-1]
+                if dp[si][ei] and ei-si+1>len(ans[0]):
+                    ans[0]=s[si:ei+1]
+            si,ei=si+1,ei+1
+    return ans[0]
+
+def longestPalindrome(s):
+    if not s or len(s)==1: return s
+    def palin(s, i1, i2):
+        res=''
+        if i2<len(s) and s[i1]==s[i2]:
+            while i1>-1 and i2<len(s) and s[i1]==s[i2]:
+                res=s[i1:i2+1]
+                i1,i2=i1-1,i2+1
+        return res
+    ans=[s[0]]
+    for i in range(0,len(s)):
+        s1=palin(s,i,i)
+        s2=palin(s,i,i+1)
+        ms=s1 if len(s1)>len(s2) else s2
+        if len(ms)>len(ans[0]):
+            ans[0]=ms
+    return ans[0]
+        
+print(longestPalindrome("babad")=="bab")
+print(longestPalindrome("aaaabaaa")=="aaabaaa")
+print(longestPalindrome("bb")=="bb")
+
+longestPalindrome("abcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacdabcbcbbacd")=="bcbcb"
+
+s="aaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaaaaaabaaa"
+
+
+s="civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"
+
+s="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+copy from other's submission:
+
+    def longestPalindrome(self, s):
+        if len(s)==0:
+            return ""
+        maxLen=1
+        start=0
+        for i in xrange(len(s)):
+            if i-maxLen >=1 and s[i-maxLen-1:i+1]==s[i-maxLen-1:i+1][::-1]:
+                start=i-maxLen-1
+                maxLen+=2
+                continue
+
+            if i-maxLen >=0 and s[i-maxLen:i+1]==s[i-maxLen:i+1][::-1]:
+                start=i-maxLen
+                maxLen+=1
+        return s[start:start+maxLen]
