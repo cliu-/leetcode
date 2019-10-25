@@ -1,0 +1,32 @@
+def convert(s, nb, pb):
+    s=s.rstrip()
+    if not s: return 0
+    signs,numbers={'-':-1,'+':1},{'0':0,'1':1,'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9}
+    if s[0] not in signs.keys()|numbers.keys(): return 0
+    sign = signs[s[0]] if s[0] in signs else signs['+']
+    s = s[1:] if s[0] in signs else s
+    n=0
+    for i,c in enumerate(s):
+        if c in numbers:
+            x=numbers[c]*sign
+            if sign==1 and n<=(pb-x)/10:
+                n=n*10+x
+            elif sign==-1 and n>=(nb-x)/10:
+                n=n*10+x
+            else:
+                return 0
+        else: break
+    return n
+
+assert(convert('01000199sdf', -199, 2000) == 0)
+assert(convert('00000199sdf', -199, 2000) == 0)
+assert(convert('hjg00000199sdf', -199, 2000) == 0)
+assert(convert('00 000199sdf', -199, 2000) == 0)
+assert(convert('01000199', -199, 2000000000) == 1000199)
+assert(convert('01000199', -199, 2000) == 0)
+
+assert(convert('199', -199, 200)==199)
+assert(convert('-199', -199, 200)==-199)
+assert(convert('-200', -199, 200)==0)
+assert(convert('200', -199, 200)==200)
+assert(convert('201', -199, 200)==0)
