@@ -69,6 +69,24 @@ def reverse(x):
         print(ans)
         i-=1
     return ans*(-1 if x<0 else 1)
+
+
+
+def reverse(x,ne_boundry,po_boundry):
+    if -10<x<10: return x
+    sign = 1 if x<0 else -1
+    result = 0
+    x = x*sign
+    boundry=ne_boundry if sign==1 else -po_boundry
+
+    while x<0:
+        reminder=x%-10
+        if result!=0 and result<(boundry-reminder)/10:
+            return 0
+        result=result*10+reminder
+        x=(x//-10)*-1
+
+    return result*sign
         
 The most submissions look like below. And the process of such solution is, first, do the integer reverse, finaly, do the overflow checking. This approach would not be working in a 32bit system, because after the first step, the reversed integer has been overflow already!! It could work with Python, but if the language is JAVA or C/C++, it does not work.
 
