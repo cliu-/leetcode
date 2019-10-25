@@ -1,0 +1,10 @@
+def isPalindrome(x):
+    if x<0: return False
+    if x<10: return True
+    def reverse(x):
+        n=0
+        while x>0:
+            n=n*10+x%10
+            x=x//10
+        return n
+    return x==reverse(x)
