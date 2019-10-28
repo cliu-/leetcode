@@ -53,6 +53,7 @@ s = "mississippi"
 p = "mis*is*p*."
 Output: false
 
+Below code failed at case `assert(isMatch("aaa","ab*a*c*a")==True)`. It's not easy to solve the problem with iteration approach.
 def isMatch(s, p):
     if s==p: return True
     if not p: return False
@@ -72,6 +73,27 @@ def isMatch(s, p):
                 i,j=i+1,j+1
     return True
 
+def isMatch(s,p):
+    if s==p: return True
+    if not p: return False
+    m={}
+    def dp(i,j):
+        if (i,j) not in m:
+            if j==len(p): 
+                m[(i,j)]=i==len(s)
+            else: 
+                match=True if j<len(p) and i<len(s) and (p[j]==s[i] or p[j]=='.') else False
+                is_star=True if j+1<len(p) and p[j+1]=='*' else False
+                if match:
+                    if is_star: m[(i,j)]=dp(i,j+2) or dp(i+1,j)
+                    else: m[(i,j)]=dp(i+1,j+1)
+                else:
+                    if is_star: m[(i,j)]=dp(i,j+2)
+                    else: m[(i,j)]=False
+        return m[(i,j)]
+    return dp(0,0)
+
+assert(isMatch("aaa","ab*a*c*a")==True)
 assert(isMatch("aa","a*")==True)
 assert(isMatch("aaa","a*a")==True)
 assert(isMatch("aaaaaaaaaaaaab","a*a*a*a*a*a*a*a*a*a*c")==False)
