@@ -1,0 +1,55 @@
+23. Merge k Sorted Lists
+Hard
+
+Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+
+Example:
+
+Input:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+Output: 1->1->2->3->4->4->5->6
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def mergeKLists(self, lists):
+        """
+        :type lists: List[ListNode]
+        :rtype: ListNode
+        """
+```
+
+1st answer, accepted.
+Time complexity, denote `len(lists)=k` and `len(list[*])=N`, so the the first `for` loop is `k*N`, sorting is `log(k*N)`, and the last `for` loop is `k*N`, so sum them together, overall time complexity is `O(k*N)`.
+Space complexity, we created a `dict` object to collect the `ListNode` objects, however, we don't use additional space to store the objects, we just reference them. So the additional space we created for this solution is the `keys` in `dict`, they are M*N. The space complexity is O(M*N).
+Runtime: 76 ms, faster than 97.78%. Memory Usage: 17.3 MB, less than 86.36%.
+```python
+from collections import defaultdict
+mergeKLists(lists):
+    if not lists: return None
+    if len(lists)==1: return lists
+    map={}
+    for l in lists:
+        while l:
+            nn=l.next
+            l.next=map[l.val] if l.val in map else None
+            map[l.val]=l
+            l=nn
+    arr=sorted(list(map.keys()))
+    p0=p=ListNode(0)
+    for i in range(len(arr)):
+        p.next=map[arr[i]]
+        while True:
+            if not p.next: break
+            else: p=p.next
+    return p0.next
+```
