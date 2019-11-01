@@ -1,0 +1,167 @@
+15. 3Sum
+Medium
+
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+
+Note:
+
+The solution set must not contain duplicate triplets.
+
+Example:
+```
+Given array nums = [-1, 0, 1, 2, -1, -4],
+
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+```
+
+```python
+class Solution(object):
+    def threeSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+```
+
+1st answer. This answer will list all `permutations` of triples which the sum is zero. It is wrong, we need to find all `combinations` what means the order of element in triple does not matter.
+```python
+from collections import Counter
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    counter,s,ans=Counter(nums),set(nums),[]
+    def recurse(sett, t=0, tri=[]):
+        if len(tri)==3 and t==0:
+            ans.append(tri)
+        else:
+            for i in sett:
+                counter[i]=counter[i]-1
+                if counter[i]==0: sett.remove(i)
+                recurse(sett, t-i, tri+[i])
+                if counter[i]==0: sett.add(i)
+                counter[i]=counter[i]+1
+    recurse(s)
+    return ans
+```
+
+2nd answer. Time limit exceeded at case `[6,-5,-6,-1,-2,8,-1,4,-10,-8,-10,-2,-4,-1,-8,-2,8,9,-5,-2,-8,-9,-3,-5]`. The time complexity of this answer is O(N**3)
+```python
+from collections import Counter
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    ans=[]
+    def recurse(i=0, t=0, tri=[]):
+        if len(tri)==3 and t==0:
+            for a in ans:
+                if set(a)==set(tri): return
+            ans.append(tri)
+            return
+        if i==len(nums): return
+        for k in range(i, len(nums)):
+            recurse(k+1, t-nums[k], tri+[nums[k]])
+    recurse()
+    return ans
+```
+
+3rd answer. Time limit exceeded at case `[9,-4,-5,8,-5,7,5,-6,-4,-13,9,-10,-13,-6,2,-15,-13,-9,-4,-13,-9,-9,13,-13,-9,9,-15,1,0,-14,-8,-13,-11,-5,2,0,9,14,9,-9,8,-5,-12,10,-3,5,3,-1,12,14,1,10,12,-1,13,-12,-14,13,4,-7,6,4,-5,11,6,4,-12,0,3,4,-2,-3,7,1,14,-11,-8,2,-5,11,-7,3,6,-9,9,4,-14,10,-6,-2,-11,-14,-13,-9,4,0,11,-1,-15,-9,-12,-1,3,10,7,-5,6,6,12,8,2,-9,-4,-6,-11,-9,5,-10,-14,-15,3]`.
+The main problem I met for this `3Sum` is how can I filter the duplicated set.
+```python
+from collections import Counter
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    ans,map=[],{nums[i]:i for i in range(len(nums))}
+    for i in range(len(nums)-2):
+        for j in range(i+1,len(nums)-1):
+            r=0-(nums[i]+nums[j])
+            if r in map and map[r]>j:
+                tri,exists=[nums[i],nums[j],r],False
+                for a in ans: 
+                    if set(a)==set(tri):
+                        exists=True
+                        break
+                if not exists:
+                    ans.append(tri)
+    return ans
+```
+
+4th answer, I'm going to try the 3rd answer with a sorted arrary, this would be solve the duplicated set problem. This answer was accepted, but run time and memory usage were not good, 1708 ms, faster than 10.03% of Python online submissions for 3Sum; 15.4 MB, less than 17.31% of Python online submissions for 3Sum.
+```python
+from collections import Counter
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    nums=sorted(nums)
+    ans,map=set(),{nums[i]:i for i in range(len(nums))}
+    for i in range(len(nums)-2):
+        for j in range(i+1,len(nums)-1):
+            r=0-(nums[i]+nums[j])
+            if r in map and map[r]>j:
+                tri=(nums[i],nums[j],r)
+                if tri not in ans:
+                    ans.add(tri)
+    return list(ans)
+```
+
+Ok, my previous answers are all problematic, answer 5, the optimal answer, is to use left-right-pointers.
+```python
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    nums,last,ans=sorted(nums),[],set()
+    for i in range(len(nums)-2):
+        if last and nums[i]==last[0]: continue
+        if not last: last.append(nums[i])
+        else: last[0]=nums[i]
+        t,l,r=0-nums[i],i+1,len(nums)-1
+        while l<r:
+            if nums[l]+nums[r]<t:
+                l+=1
+            elif nums[l]+nums[r]>t:
+                r-=1
+            else:
+                tri=(nums[i],nums[l],nums[r])
+                if not ans or ans and tri not in ans:
+                    ans.add((nums[i],nums[l],nums[r]))
+                l,r=l+1,r-1
+    return list(ans)
+```
+
+Let's think about the left-right-pointers, if the list looks like [-1,0,0,0,1,1,1,1], the 5th answer could solve the list correctly, but if we can remeber the last left-value and the last right-value, compare to the current ones, skip the same values, it could be more efficient.
+```python
+def threeSum(nums):
+    if not nums or len(nums)<3: return []
+    nums,last,ans=sorted(nums),[],[]
+    for i in range(len(nums)-2):
+        if last and nums[i]==last[0]: continue
+        if not last: last.append(nums[i])
+        else: last[0]=nums[i]
+        t,l,r,lp=0-nums[i],i+1,len(nums)-1,[]
+        while l<r:
+            if (lp and nums[l]==lp[0]) or nums[l]+nums[r]<t:
+                l+=1
+            elif (lp and nums[r]==lp[1]) or nums[l]+nums[r]>t:
+                r-=1
+            elif nums[l]+nums[r]==t:
+                if not lp:
+                    lp.append(nums[l])
+                    lp.append(nums[r])
+                else: lp[0],lp[1]=nums[l],nums[r]
+                ans.append((nums[i],nums[l],nums[r]))
+                l,r=l+1,r-1
+    return list(ans)
+```
+
+
+threeSum([0,0,0])==[[0,0,0]]
+
+threeSum([-1, 0, 1, 2, -1, -4])
+
+threeSum([6,-5,-6,-1,-2,8,-1,4,-10,-8,-10,-2,-4,-1,-8,-2,8,9,-5,-2,-8,-9,-3,-5])
+
+threeSum([9,-4,-5,8,-5,7,5,-6,-4,-13,9,-10,-13,-6,2,-15,-13,-9,-4,-13,-9,-9,13,-13,-9,9,-15,1,0,-14,-8,-13,-11,-5,2,0,9,14,9,-9,8,-5,-12,10,-3,5,3,-1,12,14,1,10,12,-1,13,-12,-14,13,4,-7,6,4,-5,11,6,4,-12,0,3,4,-2,-3,7,1,14,-11,-8,2,-5,11,-7,3,6,-9,9,4,-14,10,-6,-2,-11,-14,-13,-9,4,0,11,-1,-15,-9,-12,-1,3,10,7,-5,6,6,12,8,2,-9,-4,-6,-11,-9,5,-10,-14,-15,3])
+
+threeSum([-4,-2,-2,-2,0,1,2,2,2,3,3,4,4,6,6]) == [[-4,-2,6],[-4,0,4],[-4,1,3],[-4,2,2],[-2,-2,4],[-2,0,2]]
+
+
+threeSum([1,2,-2,-1]) == []
