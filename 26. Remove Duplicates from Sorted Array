@@ -49,8 +49,35 @@ class Solution(object):
         """
 ```
 
+1st answer, accepted. Analyse the answer carefully, do I really need to swap values of p0 and p1? do we really need to deal with `p0==0` case?
 ```python
 def removeDuplicates(nums):
-    if len(nums)<2 or len(set(nums))==len(nums): 
+    if len(nums)<2 or len(set(nums))==len(nums):
         return len(nums)
+    p0,p1,v=0,1,nums[0]
+    while p1<len(nums):
+        if nums[p1]==v:
+            if p0==0:
+                p0=p1
+            p1=p1+1
+        else:
+            v=nums[p1]
+            if p0!=0:
+                nums[p0],nums[p1]=nums[p1],nums[p0]
+                p0=p0+1
+            p1=p1+1
+    return p0
+```
+
+2nd answer. 1st answer and 2nd answer have same runtime and memory usage, but 2nd answer is more neat.
+```python
+def removeDuplicates(nums):
+    if len(nums)<2 or len(set(nums))==len(nums):
+        return len(nums)
+    p0,p1=0,1
+    while p1<len(nums):
+        if nums[p0]!=nums[p1]:
+            p0+=1
+            nums[p0]=nums[p1]
+        p1+=1
 ```
