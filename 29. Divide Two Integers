@@ -1,0 +1,81 @@
+29. Divide Two Integers
+Medium
+
+Given two integers dividend and divisor, divide two integers without using multiplication, division and mod operator.
+
+Return the quotient after dividing dividend by divisor.
+
+The integer division should truncate toward zero.
+
+Example 1:
+```
+Input: dividend = 10, divisor = 3
+Output: 3
+```
+Example 2:
+```
+Input: dividend = 7, divisor = -3
+Output: -2
+```
+
+Note:
+
+Both dividend and divisor will be 32-bit signed integers.
+The divisor will never be 0.
+Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−231,  231 − 1]. For the purpose of this problem, assume that your function returns 231 − 1 when the division result overflows.
+
+```python
+class Solution(object):
+    def divide(self, dividend, divisor):
+        """
+        :type dividend: int
+        :type divisor: int
+        :rtype: int
+        """
+
+```
+
+This is a bitwise operation problem. For bitwise left shift(there is no logical or arithmetic distinguish for left shit operation), the equation is `x<<n == x*(2**n)`. With this property, we can continue do left shift for divisor utile the value is greater than dividend, then we got a `reminder`. Put the `reminder` as dividend and do the "left shift" function recursively. We can find the answer.
+
+And another problem is integer overflow, we have to deal with it.
+
+1st answer, failed at case `-2147483648, -1`, the answer should be `2147483647`, but it return `2147483648`.
+```python
+def divide(dividend, divisor):
+    d1,d2=abs(dividend),abs(divisor)
+    sign=(dividend<0) is (divisor<0)
+    i,res=0,0
+    while d2<=d1:
+        t=d2<<i
+        if t==d1: 
+            return res+(1<<i) if sign else -(res+(1<<i))
+        if t>d1:
+            res=res+(1<<(i-1))
+            d1,i=d1-(d2<<(i-1)),0
+        else:
+            i=i+1
+    res=res if sign else -res
+    print(res)
+    if -2**31<=res<=2**31-1: return res
+    return 2**31-1 if sign else -2**31
+```
+
+2nd answer, accepted.
+```python
+def divide(dividend, divisor):
+    d1,d2=abs(dividend),abs(divisor)
+    p=(dividend<0) is (divisor<0)
+    i,res=0,0
+    while d2<=d1:
+        t=d2<<i
+        if t==d1: 
+            res=res+(1<<i)
+            break
+        if t>d1:
+            res=res+(1<<(i-1))
+            d1,i=d1-(d2<<(i-1)),0
+        else:
+            i=i+1
+    if not p: res=-res
+    return min(max(-2147483648, res), 2147483647)
+```
