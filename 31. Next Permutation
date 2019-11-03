@@ -23,6 +23,7 @@ class Solution(object):
 ```
 
 1st answer, accepted. Runtime: 28 ms, faster than 69.37%. Memory Usage: 11.8 MB, less than 39.62%.
+
 ```python
 def nextPermutation(nums):
     if len(nums)<2: return nums
@@ -54,6 +55,11 @@ def nextPermutation(nums):
     func(nums)
     print(nums)
 ```
+
+The theory of solving this problem:
+
+![Alt text](31_Next_Permutation.gif)
+
 
 nextPermutation([3,4,3,3,3,2,1])==[4,1,2,3,3,3,3]
 
