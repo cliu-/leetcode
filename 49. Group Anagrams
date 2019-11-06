@@ -1,0 +1,113 @@
+49. Group Anagrams
+Medium
+
+Given an array of strings, group anagrams together.
+
+Example:
+```
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+Output:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+```
+
+Note:
+
+- All inputs will be in lowercase.
+- The order of your output does not matter.
+
+```python
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+```
+
+```python
+def groupAnagrams(strs):
+    ss,ans=[set(s) for s in strs],[]
+    for i in range(len(strs)):
+        s,found=strs[i],False
+        for a in ans:
+            if len(set(a[0])^set(s))==0:
+                found=True
+                a.append(s)
+                break
+        if not found: ans.append([s])
+    return ans
+```
+
+1st solution, Runtime: 116 ms, faster than 16.77% of Python online submissions for Group Anagrams. Memory Usage: 18 MB, less than 6.25% of Python online submissions for Group Anagrams.
+Time complexity and space complexity are both not good, need to optimize.
+```python
+def groupAnagrams(strs):
+    if not strs: return []
+    cs=[[] for _ in range(26)]
+    for i,s in enumerate(strs):
+        for c in s:
+            cs[ord(c)-97].append(i)
+    print("cs={}".format(cs))
+    cp=['' for _ in strs]
+    for i in range(len(cs)):
+        if not cs[i]: continue
+        for j in range(len(cs[i])):
+            cp[cs[i][j]]+=chr(97+i)
+    ans,map=[],defaultdict(list)
+    for i in range(len(cp)):
+        map[cp[i]].append(i)
+    for v in map.values():
+        ans.append([strs[i] for i in v])
+    return ans
+```
+
+2nd solution, it seems the `map` does not need to store the indeces of `strs`, if it just store the value of `strs`, would be better.
+Runtime: 124 ms, faster than 14.54% of Python online submissions for Group Anagrams.
+Memory Usage: 16.9 MB, less than 14.58% of Python online submissions for Group Anagrams.
+```python
+from collections import defaultdict
+def groupAnagrams(strs):
+    if not strs: return []
+    cs=[[] for _ in range(26)]
+    for i,s in enumerate(strs):
+        for c in s:
+            cs[ord(c)-97].append(i)
+    cp=['' for _ in strs]
+    for i in range(len(cs)):
+        if not cs[i]: continue
+        for j in range(len(cs[i])):
+            cp[cs[i][j]]+=chr(97+i)
+    map=defaultdict(list)
+    for i in range(len(cp)):
+        map[cp[i]].append(strs[i])
+    return map.values()
+```
+
+3rd solution.
+Runtime: 144 ms, faster than 11.71% of Python online submissions for Group Anagrams.
+Memory Usage: 18.8 MB, less than 6.25% of Python online submissions for Group Anagrams.
+```python
+from collections import defaultdict
+def groupAnagrams(strs):
+    if not strs: return []
+    arr,map=[[0]*26 for _ in strs],defaultdict(list)
+    for i,s in enumerate(strs):
+        for c in s:
+            arr[i][ord(c)-97]+=1
+    for i in range(len(arr)):
+        s=''
+        for j in range(26):
+            while arr[i][j]>0:
+                s,arr[i][j]=s+chr(j+97),arr[i][j]-1
+        map[s].append(strs[i])
+    return map.values()
+```
+
+conclusion:
+If we cannot use build-in sorting algorithm to sort the element in `strs`, the runtime cannot be optimized much.
+
+["hos","boo","nay","deb","wow","bop","bob","brr","hey","rye","eve","elf","pup","bum","iva","lyx","yap","ugh","hem","rod","aha","nam","gap","yea","doc","pen","job","dis","max","oho","jed","lye","ram","pup","qua","ugh","mir","nap","deb","hog","let","gym","bye","lon","aft","eel","sol","jab"] == [["sol"],["wow"],["gap"],["hem"],["yap"],["bum"],["ugh","ugh"],["aha"],["jab"],["eve"],["bop"],["lyx"],["jed"],["iva"],["rod"],["boo"],["brr"],["hog"],["nay"],["mir"],["deb","deb"],["aft"],["dis"],["yea"],["hos"],["rye"],["hey"],["doc"],["bob"],["eel"],["pen"],["job"],["max"],["oho"],["lye"],["ram"],["nap"],["elf"],["qua"],["pup","pup"],["let"],["gym"],["nam"],["bye"],["lon"]]
