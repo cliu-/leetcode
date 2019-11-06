@@ -1,0 +1,69 @@
+47. Permutations II
+Medium
+
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+```
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+```
+
+```python
+class Solution(object):
+    def permuteUnique(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+```
+
+1st solution. Runtime: 36 ms, faster than 92.47% of Python online submissions for Permutations II. Memory Usage: 12.2 MB, less than 20.00% of Python online submissions for Permutations II.
+I use python language's property, `tuple` and `set` to help remove the duplicated answers in this solution.
+```python
+from collections import deque
+def permuteUnique(nums):
+    if not nums: return []
+    q=set([(nums[0],)])
+    for k in range(1,len(nums)):
+        ql,v,ss=len(q),nums[k],set()
+        while q:
+            e=q.pop()
+            for i in range(len(e),-1,-1):
+                ss.add(e[:i]+(v,)+e[i:])
+        q=q|ss
+    return list(q)
+```
+
+My old submission, this solution use the sorted array to solve the duplicated element problem.
+```python
+class Solution(object):
+    def permuteUnique(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        l, ans = len(nums), []
+        nums = sorted(nums)
+        def backtrack(nums, combT):
+            if len(combT) == l: ans.append(list(combT))
+            else:
+                i = 0
+                while i < len(nums):
+                    n = nums[i]
+                    backtrack(nums[:i]+nums[i+1:], combT+(n,))
+                    i+=1
+                    while i<len(nums) and nums[i]==n:
+                        i+=1
+        backtrack(nums, ())
+        return ans 
+```
+
+[[2,2,1,2,1],[2,1,2,2,1],[2,1,1,2,2],[2,2,2,1,1],[2,1,2,1,2],[1,2,1,2,2],[2,2,1,1,2],[1,1,2,2,2],[1,2,2,2,1],[1,2,2,1,2]]
+
+[[1,1,2,2,2],[1,2,1,2,2],[1,2,2,1,2],[1,2,2,2,1],[2,1,1,2,2],[2,1,2,1,2],[2,1,2,2,1],[2,2,1,1,2],[2,2,1,2,1],[2,2,2,1,1]]
