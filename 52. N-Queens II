@@ -1,0 +1,63 @@
+52. N-Queens II
+Hard
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+![Alt text](8-queens.png)
+
+Given an integer n, return the number of distinct solutions to the n-queens puzzle.
+
+Example:
+```
+Input: 4
+Output: 2
+Explanation: There are two distinct solutions to the 4-queens puzzle as shown below.
+[
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+```
+
+```python
+class Solution(object):
+    def totalNQueens(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+```
+
+1st solution. Runtime: 36 ms, faster than 86.93% of Python online submissions for N-Queens II.
+Memory Usage: 11.8 MB, less than 75.00% of Python online submissions for N-Queens II.
+```python
+def totalNQueens(n):
+    if n==1: return 1
+    if n<4: return 0
+    row,col,diag0,diag1=set(),set(),set(),set()
+    ans=[0]
+    def func(x,queens,n):
+        if x==n:
+            if queens==0: ans[0]+=1
+            return
+        for y in range(n):
+            if x not in row and y not in col and \
+                x+y not in diag0 and x-y not in diag1:
+                row.add(x)
+                col.add(y)
+                diag0.add(x+y)
+                diag1.add(x-y)
+                func(x+1,queens-1,n)
+                row.remove(x)
+                col.remove(y)
+                diag0.remove(x+y)
+                diag1.remove(x-y)
+    func(0,n,n)
+    return ans[0]
+```

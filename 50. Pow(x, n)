@@ -1,0 +1,62 @@
+50. Pow(x, n)
+Medium
+
+Implement pow(x, n), which calculates x raised to the power n (xn).
+
+Example 1:
+
+Input: 2.00000, 10
+Output: 1024.00000
+Example 2:
+
+Input: 2.10000, 3
+Output: 9.26100
+Example 3:
+
+Input: 2.00000, -2
+Output: 0.25000
+Explanation: 2-2 = 1/22 = 1/4 = 0.25
+Note:
+
+-100.0 < x < 100.0
+n is a 32-bit signed integer, within the range [−2**31, 2**31 − 1]
+
+```python
+class Solution(object):
+    def myPow(self, x, n):
+        """
+        :type x: float
+        :type n: int
+        :rtype: float
+        """
+```
+
+1st answer, using binary search to reduce the time complexity to `log(n)`, Time Limit Exceeded at case `myPow(0.00001,2147483647)`.
+```python
+def myPow(x, n):
+    if n==0: return 1
+    f,n=bool(n>0),abs(n)
+    def func(x,n):
+        if n==1: return x
+        m=n//2
+        return func(x,m)*func(x,n-m)
+    r=func(x,n)
+    return r if f else 1/r
+```
+
+2nd answer, we need a cache to store the explaination we have calculated.Runtime: 20 ms, faster than 42.85% of Python online submissions for Pow(x, n). Memory Usage: 12.1 MB, less than 5.00% of Python online submissions for Pow(x, n).
+```python
+def myPow(x, n):
+    if n==0: return 1
+    f,n,map=bool(n>0),abs(n),{}
+    def func(x,n):
+        if n==1: return x
+        if n not in map:
+            m=n//2
+            map[n]=func(x,m)*func(x,n-m)
+        return map[n]
+    r=func(x,n)
+    return r if f else 1/r
+```
+myPow(2.10400,-10)
+myPow(0.00001,2147483647)

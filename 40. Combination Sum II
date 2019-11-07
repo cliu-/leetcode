@@ -1,0 +1,91 @@
+40. Combination Sum II
+Medium
+
+Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+Each number in candidates may only be used once in the combination.
+
+Note:
+
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+Example 1:
+```
+Input: candidates = [10,1,2,7,6,1,5], target = 8,
+A solution set is:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+```
+Example 2:
+```
+Input: candidates = [2,5,2,1,2], target = 5,
+A solution set is:
+[
+  [1,2,2],
+  [5]
+]
+```
+
+```python
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        """
+        :type candidates: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+```
+
+1st solution. Runtime: 124 ms, faster than 23.47%. Memory Usage: 11.9 MB, less than 48.39%.
+The problem of this solution:
+1. I did not logicall remove the duplicated combination from the answer, I'm using Python's tuple and set properties to around it. See case `candidates = [2,5,2,1,2], target = 5`, in the solution, it actually cannot find the duplicated combinations with the three `2`s.
+2. I spent much time to debug the solution.
+```python
+def combinationSum2(candidates, target):
+    if not candidates: return []
+    if len(candidates)==1: return [[target]] if candidates[0]==target else []
+    arr=sorted(candidates)
+    if target<arr[0]: return []
+    ans=set()
+    def func(arr,i,t,res=[]):
+        if t==0 and i<=len(arr):
+            ans.add(tuple(res))
+            return
+        if i==len(arr) or t<arr[i]: return
+        while i<len(arr):
+            func(arr,i+1,t-arr[i],res+[arr[i]])
+            i+=1
+    func(arr,0,target)
+    return list(ans)
+```
+
+2nd solution.
+For the first problem of 1st solution, example `candidates=[1,2,2,2,5];target=5`, when we're in the recursion of where `i:1`(`candidates[1]`, the first `2`), the next recursion is going to `i:2` which the value of `candidates[2]` is `2` as well, at the same recursion level, the next of `i:2` recursion is `i:3`, so we can add a condition here, at the same level, if the next of next recursion(`i:3`) has the same in-pass parameters with the next recursion(`i:2`), we just skip the next of next recursion(`i:3`). 
+Runtime: 40 ms, faster than 76.05%. Memory Usage: 11.9 MB, less than 25.81%.
+```python
+def combinationSum2(candidates, target):
+    if not candidates: return []
+    if len(candidates)==1: return [[target]] if candidates[0]==target else []
+    arr=sorted(candidates)
+    if target<arr[0]: return []
+    ans=[]
+    def func(arr,i,t,res=[]):
+        if t==0 and i<=len(arr):
+            ans.append(res)
+            return
+        if i==len(arr) or t<arr[i]: return
+        while i<len(arr):
+            func(arr,i+1,t-arr[i],res+[arr[i]])
+            i+=1
+            while i<len(arr) and arr[i]==arr[i-1]:
+                i+=1
+    func(arr,0,target)
+    return ans
+```
+
+combinationSum2([10,1,2,7,6,1,5],8)
+combinationSum2([2,5,2,1,2],5)

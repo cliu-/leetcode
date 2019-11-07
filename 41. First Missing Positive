@@ -1,0 +1,86 @@
+41. First Missing Positive
+Hard
+
+Given an unsorted integer array, find the smallest missing positive integer.
+
+Example 1:
+```
+Input: [1,2,0]
+Output: 3
+```
+Example 2:
+```
+Input: [3,4,-1,1]
+Output: 2
+```
+Example 3:
+```
+Input: [7,8,9,11,12]
+Output: 1
+```
+
+Note:
+
+Your algorithm should run in O(n) time and uses constant extra space.
+
+```python
+class Solution(object):
+    def firstMissingPositive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+```
+
+1st solution, failed at case `[1]`, should be return `2`, but actually return `1`.
+```python
+def firstMissingPositive(nums):
+    if not nums: return 1
+    _max,_min,_amount=0,2**32,0
+    for i,n in enumerate(nums):
+        if n>0 and n<=len(nums):
+            _amount+=1
+            if n>_max: _max=n
+            if n<_min: _min=n
+        else:
+            nums[i]=0
+    if _min>1: return 1
+    for i in range(len(nums)):
+        while nums[i]!=0 and nums[i]!=i+1:
+            t=nums[i]-1
+            if nums[i]==nums[t]: nums[i]=0
+            else: nums[i],nums[t]=nums[t],nums[i]
+    for i,n in enumerate(nums):
+        if n==0: return i+1
+    return 1
+```
+
+2nd solution, accepted.
+```python
+def firstMissingPositive(nums):
+    if not nums: return 1
+    _max,_min,_amount=0,2**32,0
+    for i,n in enumerate(nums):
+        if n>0 and n<=len(nums):
+            _amount+=1
+            if n>_max: _max=n
+            if n<_min: _min=n
+        else:
+            nums[i]=0
+    if _min>1: return 1
+    for i in range(len(nums)):
+        while nums[i]!=0 and nums[i]!=i+1:
+            t=nums[i]-1
+            if nums[i]==nums[t]: nums[i]=0
+            else: nums[i],nums[t]=nums[t],nums[i]
+    for i,n in enumerate(nums):
+        if n==0: return i+1
+    return _max+1
+```
+
+firstMissingPositive([1,2,0])==3
+firstMissingPositive([3,4,-1,1])==2
+firstMissingPositive([7,8,9,11,12])==1
+
+firstMissingPositive([3,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,9,4,6,7,1,1,1,3,1])==2
+firstMissingPositive([1])
