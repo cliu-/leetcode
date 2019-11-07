@@ -1,0 +1,47 @@
+59. Spiral Matrix II
+Medium
+
+Given a positive integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+
+Example:
+
+Input: 3
+Output:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+
+```python
+class Solution(object):
+    def generateMatrix(self, n):
+        """
+        :type n: int
+        :rtype: List[List[int]]
+        """
+```
+
+1st solution. Runtime: 20 ms, faster than 55.44% of Python online submissions for Spiral Matrix II. Memory Usage: 11.9 MB, less than 14.29% of Python online submissions for Spiral Matrix II.
+```python
+def generateMatrix(n):
+    if n==1: return [[1]]
+    matrix,t=[[0]*n for _ in range(n)],1
+    l,m=0,n*n
+    while True:
+        x,y=l,n-l-1
+        for i in range(x,y+1): 
+            matrix[x][i],t=t,t+1
+            if t>m: return matrix
+        for i in range(x+1,y+1):
+            matrix[i][y],t=t,t+1
+            if t>m: return matrix
+        for i in range(y-1,x-1,-1):
+            matrix[y][i],t=t,t+1
+            if t>m: return matrix
+        for i in range(y-1,x,-1):
+            matrix[i][x],t=t,t+1
+            if t>m: return matrix
+        l+=1
+    return matrix
+```

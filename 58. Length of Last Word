@@ -1,0 +1,44 @@
+58. Length of Last Word
+Easy
+
+Given a string s consists of upper/lower-case alphabets and empty space characters `' '`, return the length of last word in the string.
+
+If the last word does not exist, return 0.
+
+Note: A word is defined as a character sequence consists of non-space characters only.
+
+Example:
+```
+Input: "Hello World"
+Output: 5
+```
+
+```python
+class Solution(object):
+    def lengthOfLastWord(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+
+```
+
+1st solution. Runtime: 28 ms, faster than 5.10% of Python online submissions for Length of Last Word. Memory Usage: 11.9 MB, less than 32.14% of Python online submissions for Length of Last Word.
+```python
+def lengthOfLastWord(s):
+    ans,t=0,0
+    for c in s+' ':
+        if c==' ':
+            if t>0: ans=t
+            t=0
+        else:
+            t+=1
+    return ans
+```
+
+2nd solution. Runtime: 12 ms, faster than 90.88% of Python online submissions for Length of Last Word. Memory Usage: 11.9 MB, less than 32.14% of Python online submissions for Length of Last Word.
+```python
+def lengthOfLastWord(s):
+    a=s.split()
+    return 0 if not a else len(a[-1])
+```

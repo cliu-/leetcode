@@ -1,0 +1,118 @@
+60. Permutation Sequence
+Medium
+
+The set `[1,2,3,...,n]` contains a total of n! unique permutations.
+
+By listing and labeling all of the permutations in order, we get the following sequence for n = 3:
+
+1. `"123"`
+2. `"132"`
+3. `"213"`
+4. `"231"`
+5. `"312"`
+6. `"321"`
+Given n and k, return the kth permutation sequence.
+
+Note:
+
+- Given n will be between 1 and 9 inclusive.
+- Given k will be between 1 and n! inclusive.
+
+Example 1:
+```
+Input: n = 3, k = 3
+Output: "213"
+
+```
+Example 2:
+```
+Input: n = 4, k = 9
+Output: "2314"
+```
+
+```python
+class Solution(object):
+    def getPermutation(self, n, k):
+        """
+        :type n: int
+        :type k: int
+        :rtype: str
+        """
+```
+
+Do the list all permutation first.
+```python
+from collections import deque
+def list_permutation(n):
+    q=deque([_ for _ in range(1,n+1)])
+    ans=[]
+    def func(n, cur=[]):
+        if not q:
+            ans.append(cur[::])
+            return
+        l=len(q)
+        for _ in range(l):
+            cur.append(q.popleft())
+            func(n,cur)
+            q.append(cur.pop())
+    func(n)
+    return ans
+```
+
+Above solution cannot return an sorted(in ascent order) permutation list. For example, `list_permutation(3)`, the return list is `[[1, 2, 3], [1, 3, 2], [2, 3, 1], [2, 1, 3], [3, 1, 2], [3, 2, 1]]`.
+Let's revise the solution for ordering.
+```python
+def list_permutation(n):
+    arr,ans=[True]*n,[]
+    def func(n, cur=[]):
+        if len(cur)==n:
+            ans.append(cur[::])
+            return
+        for i in range(n):
+            if arr[i]:
+                arr[i]=False
+                cur.append(i+1)
+                func(n,cur)
+                arr[i]=True
+                cur.pop()
+    func(n)
+    return ans
+```
+
+Now, solve the problem. Time Limit Exceeded at the case getPermutation(9,331987).
+```python
+def getPermutation(n,k):
+    arr,count=[True]*n,[k]
+    def func(n,cur=[]):
+        if len(cur)==n:
+            count[0]=count[0]-1
+            return ''.join(cur) if count[0]==0 else ''
+        for i in range(n):
+            if arr[i]:
+                arr[i]=False
+                cur.append(str(i+1))
+                r=func(n,cur)
+                if r: return r
+                arr[i]=True
+                cur.pop()
+        return ''
+    return func(n)
+```
+
+Intuitionally, this problem could not be solved by list permutations util reaching `k`, there should be some mathmetical approach to find the right digit in each order.
+```python
+def getPermutation(n,k):
+    arr,ans,k=[_ for _ in range(1,n+1)],'',k-1
+    while n>0:
+        n-=1
+        i,k=divmod(k, math.factorial(n))
+        ans+=str(arr[i])
+        arr.pop(i)
+    return ans
+```
+
+
+getPermutation(9,331987)='928157346'
+
+
+
