@@ -1,0 +1,109 @@
+51. N-Queens
+Hard
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+![Alt text](8-queens.png)
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+Example:
+```
+Input: 4
+Output: [
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
+```
+
+```python
+class Solution(object):
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
+```
+
+1st solution. Runtime: 2648 ms, faster than 5.10% of Python online submissions for N-Queens.
+Memory Usage: 12.1 MB, less than 58.33% of Python online submissions for N-Queens.
+```python
+def solveNQueens(n):
+    if n==1: return [["Q"]]
+    if n<4: return []
+    ans=[]
+    cur=[['.']*n for _ in range(n)]
+    row,col,diag_0,diag_1=set(),set(),set(),set()
+    def func(p,m,n):
+        if m==0 and p<=n*n:
+            ans.append([''.join(e) for e in cur])
+            return
+        if m>0 and p==n*n:
+            return
+        for i in range(p,n*n):
+            x,y=i//n,i%n
+            if x not in row and y not in col and x+y not in diag_0 and x-y not in diag_1:
+                cur[x][y]='Q'
+                row.add(x)
+                col.add(y)
+                diag_0.add(x+y)
+                diag_1.add(x-y)
+                func(i+1,m-1,n)
+                cur[x][y]='.'
+                row.remove(x)
+                col.remove(y)
+                diag_0.remove(x+y)
+                diag_1.remove(x-y)
+    func(0,n,n)
+    return ans
+```
+
+2nd solution, the problem of 1st answer is, when we add `Q` to row 0 at position `[0,0]`, actually, we can skip all the rest of cells in row 0 and jump to row 1 directly. But in solution 1, I still traverse the rest of cells in row 0.
+Runtime: 48 ms, faster than 76.42% of Python online submissions for N-Queens.
+Memory Usage: 12 MB, less than 75.00% of Python online submissions for N-Queens.
+```python
+def solveNQueens(n):
+    if n==1: return [["Q"]]
+    if n<4: return []
+    ans=[]
+    cur=[['.']*n for _ in range(n)]
+    row,col,diag_0,diag_1=set(),set(),set(),set()
+    def func(x,queens,n):
+        if queens==0 and x==n:
+            ans.append([''.join(_) for _ in cur])
+            return
+        if queens>0 and x==n and y==n: return
+        for y in range(n):
+            if x not in row and y not in col and \
+                x+y not in diag_0 and x-y not in diag_1:
+                cur[x][y]='Q'
+                row.add(x)
+                col.add(y)
+                diag_0.add(x+y)
+                diag_1.add(x-y)
+                func(x+1,queens-1,n)
+                cur[x][y]='.'
+                row.remove(x)
+                col.remove(y)
+                diag_0.remove(x+y)
+                diag_1.remove(x-y)
+    func(0,n,n)
+    return ans
+```
+solveNQueens(4)
+
+
+
+
+
+
