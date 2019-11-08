@@ -1,0 +1,118 @@
+65. Valid Number
+Hard
+
+Validate if a given string can be interpreted as a decimal number.
+
+Some examples:
+```
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+" -90e3   " => true
+" 1e" => false
+"e3" => false
+" 6e-1" => true
+" 99e2.5 " => false
+"53.5e93" => true
+" --6 " => false
+"-+3" => false
+"95a54e53" => false
+```
+
+Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. However, here is a list of characters that can be in a valid decimal number:
+
+- Numbers 0-9
+- Exponent - "e"
+- Positive/negative sign - "+"/"-"
+- Decimal point - "."
+
+Of course, the context of these characters also matters in the input.
+
+Update (2015-02-10):
+The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button to reset your code definition.
+
+```
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+```
+
+1st answer, failed at case `"."`.
+```python
+def isNumber(s):
+    s=s.strip()
+    a0={'e'}
+    a1={'0','1','2','3','4','5','6','7','8','9','.'}
+    a2={'+','-'}
+    if s[0] in a2: s=s[1:]
+    dot,ex=0,0
+    for i in range(len(s)):
+        if i==0 and s[i] not in a1: return False
+        if s[i] not in a0|a1: return False
+        if s[i]=='.':
+            if ex>0: return False
+            dot+=1
+        if dot>1: return False
+        if s[i]=='e': ex+=1
+        if ex>1: return False
+    return True
+```
+
+Runtime: 24 ms, faster than 55.20% of Python online submissions for Valid Number.
+Memory Usage: 11.8 MB, less than 16.67% of Python online submissions for Valid Number.
+```python
+def isNumber(s):
+    s=s.strip()
+    if not s: return False
+    a0={'e'}
+    a1={'.'}
+    a2={'0','1','2','3','4','5','6','7','8','9'}
+    a3={'+','-'}
+    if len(s)==1: return s in a2
+    if s[-1] in a0|a3: return False
+    dot,exp,sign=0,0,0
+    for i in range(len(s)):
+        if s[i] not in a0|a1|a2|a3: return False
+        if i==0 and s[i]=='e': return False
+        if s[i] in a3:
+            sign+=1
+            if sign>1: return False
+            if i==0 and s[i+1] not in a1|a2: return False
+            if i>0 and s[i-1]!='e': return False
+        if s[i]=='.':
+            dot+=1
+            if dot>1: return False
+            if exp>0: return False
+            if i==0 or s[i-1] in a3:
+                if i==len(s)-1: return False
+                if s[i+1] not in a2: return False
+            else:
+                if s[i-1] not in a2: return False
+        if s[i]=='e':
+            exp,sign=exp+1,0
+            if exp>1: return False
+    return True
+```
+
+"-e58 " == False
+
+"." == False
+
+".e1" == False
+
+"1e" == False
+
+"2e0" ==True
+
+"2." == True
+
+" 005047e+6" == True
+
+" 005047e-6" == True
+
+"-1." == True
