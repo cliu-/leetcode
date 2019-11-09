@@ -1,0 +1,109 @@
+73. Set Matrix Zeroes
+Medium
+
+Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in-place.
+
+Example 1:
+
+Input: 
+[
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]
+Output: 
+[
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]
+Example 2:
+
+Input: 
+[
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+Output: 
+[
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]
+Follow up:
+
+- A straight forward solution using O(m*n) space is probably a bad idea.
+- A simple improvement uses O(m + n) space, but still not the best solution.
+- Could you devise a constant space solution?
+
+```python
+class Solution(object):
+    def setZeroes(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: None Do not return anything, modify matrix in-place instead.
+        """
+```
+
+1st solution, naive, space complexity is O(m+n).
+```python
+def setZeroes(matrix):
+    if not matrix: return
+    row,col=set(),set()
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j]==0:
+                row.add(i)
+                col.add(j)
+    while row:
+        i=row.pop()
+        for j in range(len(matrix[i])):
+            matrix[i][j]=0
+    while col:
+        i=col.pop()
+        for j in range(len(matrix)):
+            matrix[j][i]=0
+```
+
+2nd solution. Runtime: 116 ms, faster than 68.38% of Python online submissions for Set Matrix Zeroes. Memory Usage: 12.5 MB, less than 13.04% of Python online submissions for Set Matrix Zeroes.
+```python
+def setZeroes(matrix):
+    if not matrix: return
+    r,c=False,False
+    for i in range(len(matrix)):
+        if matrix[i][0]==0:
+            c=True
+            break
+    for i in range(len(matrix[0])):
+        if matrix[0][i]==0:
+            r=True
+            break
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j]==0:
+                matrix[0][j]=matrix[i][0]=0
+    for i in range(1,len(matrix)):
+        if matrix[i][0]==0:
+            for j in range(1,len(matrix[i])):
+                matrix[i][j]=0
+    for i in range(1,len(matrix[0])):
+        if matrix[0][i]==0:
+            for j in range(1,len(matrix)):
+                matrix[j][i]=0
+    if c:
+        for i in range(len(matrix)):
+            matrix[i][0]=0
+    if r:
+        for i in range(len(matrix[0])):
+            matrix[0][i]=0
+```
+
+
+[[1,1,1],[1,0,1],[1,1,1]]
+
+[[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+
+[[0,1,2,3],[3,4,0,2],[1,3,1,5]]
+
+[[1,0,3]]
