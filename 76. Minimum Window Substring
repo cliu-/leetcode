@@ -1,0 +1,83 @@
+76. Minimum Window Substring
+Hard
+
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+Example:
+```
+Input: S = "ADOBECODEBANC", T = "ABC"
+Output: "BANC"
+```
+
+Note:
+
+- If there is no such window in S that covers all characters in T, return the empty string "".
+- If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+
+```python
+class Solution(object):
+    def minWindow(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: str
+        """
+```
+
+1st answer. Runtime: 256 ms, faster than 17.32% of Python online submissions for Minimum Window Substring. Memory Usage: 15.4 MB, less than 14.29% of Python online submissions for Minimum Window Substring.
+```python
+from collections import Counter
+def minWindow(s, t):
+    if not s or not t: return ''
+    p0,p1,tcounter=-1,-1,Counter(t)
+    ans=''
+    for i in range(len(s)):
+        if s[i] in tcounter:
+            if p0==p1==-1: p0=p1=i
+            else: p1=i
+            tcounter[s[i]]=tcounter[s[i]]-1
+            if tcounter[s[i]]<0:
+                while tcounter[s[p0]]+1<=0:
+                    tcounter[s[p0]]+=1
+                    p0+=1
+                    while s[p0] not in tcounter:
+                        p0+=1
+            tmp=True
+            for n in tcounter.values():
+                if n>0:
+                    tmp=False
+                    break
+            if tmp and (ans=='' or p1-p0+1<len(ans)): 
+                ans=s[p0:p1+1]
+    return ans
+```
+
+
+2nd answer. The trick of this answer is, use a variable `cnt` to work with `tcounter` for record if all characters in `t` are run out. 
+Runtime: 124 ms, faster than 51.93% of Python online submissions for Minimum Window Substring. Memory Usage: 15.1 MB, less than 35.71% of Python online submissions for Minimum Window Substring.
+```python
+from collections import Counter
+def minWindow(s, t):
+    if not s or not t: return ''
+    tcounter,cnt,p0,p1,p2=Counter(t),len(t),0,0,-1
+    ans=''
+    for i in range(len(s)):
+        if s[i] in tcounter:
+            tcounter[s[i]]=tcounter[s[i]]-1
+            if tcounter[s[i]]>=0: cnt-=1
+            while cnt==0:
+                if s[p0] in tcounter:
+                    tcounter[s[p0]]+=1
+                    if tcounter[s[p0]]>0:
+                        cnt+=1
+                        if p2==-1 or i-p0<p2-p1:
+                            p1,p2=p0,i
+                p0+=1
+    return s[p1:p2+1] if p2+1-p1>=len(t) else ''
+```
+
+"aaaaaaaaaaaabbbbbcdd","abcdd" == 'abbbbbcdd'
+
+"ADOBECODEBANC","ABC" == 'BANC'
+
+"a", "aa"  ==  ''
