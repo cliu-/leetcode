@@ -1,0 +1,50 @@
+82. Remove Duplicates from Sorted List II
+Medium
+
+Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+Example 1:
+```
+Input: 1->2->3->3->4->4->5
+Output: 1->2->5
+```
+
+Example 2:
+```
+Input: 1->1->1->2->3
+Output: 2->3
+```
+
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def deleteDuplicates(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+```
+
+1st answer. Runtime: 24 ms, faster than 88.78% of Python online submissions for Remove Duplicates from Sorted List II. Memory Usage: 11.8 MB, less than 50.00% of Python online submissions for Remove Duplicates from Sorted List II.
+```python
+def deleteDuplicates(head):
+    if not head or not head.next: return head
+    dummy=ListNode(head.val-1)
+    dummy.next,skip,p0,p1=head,False,dummy,dummy
+    while p1.next:
+        if p1.next.val!=p1.val:
+            if skip:
+                p0.next=p1.next
+                p1,skip=p0,False
+            p0=p1
+        else: skip=True
+        p1=p1.next
+    if skip: p0.next=p1.next
+    return dummy.next
+```
