@@ -1,0 +1,50 @@
+85. Maximal Rectangle
+Hard
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+Example:
+```
+Input:
+[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]
+Output: 6
+```
+
+```python
+class Solution(object):
+    def maximalRectangle(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+```
+
+1st answer. This problem is the derivative of `84. Largest Rectangle in Histogram`.
+Runtime: 172 ms, faster than 89.73% of Python online submissions for Maximal Rectangle.
+Memory Usage: 19.6 MB, less than 85.71% of Python online submissions for Maximal Rectangle.
+```python
+def maximalRectangle(matrix):
+    if not matrix: return 0
+    def func(arr):
+        if len(arr)==1: return arr[0]
+        stack,area=[-1],0
+        for i in range(len(arr)):
+            while stack[-1]!=-1 and arr[stack[-1]]>=arr[i]:
+                area=max(area, arr[stack.pop()]*(i-stack[-1]-1))
+            stack.append(i)
+        while stack[-1]!=-1:
+            area=max(area, arr[stack.pop()]*(len(arr)-stack[-1]-1))
+        return area
+    arr,area=[0]*len(matrix[0]),0
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j]=='0': arr[j]=0
+            else: arr[j]+=1
+        area=max(func(arr),area)
+    return area
+```
