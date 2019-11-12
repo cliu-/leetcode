@@ -1,0 +1,47 @@
+84. Largest Rectangle in Histogram
+Hard
+
+Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, find the area of largest rectangle in the histogram.
+
+![Alt text](histogram.png)
+Above is a histogram where width of each bar is 1, given height = [2,1,5,6,2,3].
+
+![Alt text](histogram_area.png)
+The largest rectangle is shown in the shaded area, which has area = 10 unit.
+
+```python
+class Solution(object):
+    def largestRectangleArea(self, heights):
+        """
+        :type heights: List[int]
+        :rtype: int
+        """
+```
+
+```python
+def largestRectangleArea(heights):
+    if not heights: return 0
+    stack,ans=[],0
+    for i in range(len(heights)):
+        elm=(heights[i],i)
+        while stack and stack[-1][0]>heights[i]:
+            elm=stack.pop()
+        if heights[i]<=0: continue
+        if elm[1]<i: stack.append((heights[i],elm[1]))
+        if not stack:
+            ans=max(ans,(i-elm[1]+1)*heights[i])
+        else:
+            for j in range(len(stack)-1,-1,-1):
+                ans=max(ans,(i-stack[j][1]+1)*stack[j][0],heights[i])
+            stack.append((heights[i],i))
+        print('i={},ans={},stack={}'.format(i,ans,stack))
+    return ans
+```
+
+[3,2,3,5,6,3,2,3]==16
+[2,1,5,6,2,3]==10
+[4,2,0,3,2,5] == 6
+
+[4,6,0,3,2,5]==8
+
+[3,6,5,7,4,8,1,0]==20
