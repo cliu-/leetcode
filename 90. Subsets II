@@ -1,0 +1,56 @@
+90. Subsets II
+Medium
+
+Given a collection of integers that might contain duplicates, nums, return all possible subsets (the power set).
+
+Note: The solution set must not contain duplicate subsets.
+
+Example:
+
+Input: [1,2,2]
+Output:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+
+```python
+class Solution(object):
+    def subsetsWithDup(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+```
+
+Recall the problem of (#78) listing subsets for distinct integers. 
+```python
+def subsets(nums):
+    ans=[]
+    def func(nums,i,cur):
+        ans.append(cur)
+        for k in range(i,len(nums)):
+            func(nums,k+1,cur+[nums[k]])
+    func(nums,0,[])
+    return ans
+```
+
+Then, revise the solution of #78 to solve this problem.
+Runtime: 20 ms, faster than 88.34% of Python online submissions for Subsets II. Memory Usage: 11.8 MB, less than 76.92% of Python online submissions for Subsets II.
+```python
+def subsetsWithDup(nums):
+    nums=sorted(nums)
+    ans=[]
+    def func(nums,i,cur):
+        ans.append(cur)
+        for k in range(i,len(nums)):
+            if k>i and nums[k]==nums[k-1]:
+                continue
+            func(nums,k+1,cur+[nums[k]])
+    func(nums,0,[])
+    return ans
+```
