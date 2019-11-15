@@ -27,7 +27,44 @@ class Solution(object):
         """
 ```
 
-
+1st answer, O(n) space complexity.
+My experience is, most linked-list problem, we can use an array-list to solve.
+Runtime: 20 ms, faster than 46.50% of Python online submissions for Reverse Linked List II. Memory Usage: 12 MB, less than 60.00% of Python online submissions for Reverse Linked List II.
 ```python
 def reverseBetween(head, m, n):
+    dummy,arr=ListNode(0),[]
+    dummy.next=head
+    arr.append(dummy)
+    while head:
+        arr.append(head)
+        head=head.next
+    while m<n:
+        arr[m].val,arr[n].val=arr[n].val,arr[m].val
+        m,n=m+1,n-1
+    return dummy.next
 ```
+
+But 1st solution is a sort of cheat, might be challenged by interviewers.
+2nd answer, two pointers solution, O(1) space complexity.
+Runtime: 16 ms, faster than 78.64% of Python online submissions for Reverse Linked List II.
+Memory Usage: 12.1 MB, less than 20.00% of Python online submissions for Reverse Linked List II.
+```python
+def reverseBetween(head, m, n):
+    dummy=ListNode(0)
+    dummy.next=head
+    p0,p1=dummy,dummy.next
+    t=n-m
+    while m>1:
+        p1,p0,m=p1.next,p0.next,m-1
+    while t>0:
+        p2=p1.next
+        p2n,p0n=p2.next,p0.next
+        p0.next=p2
+        p2.next=p0n
+        p1.next=p2n
+        t=t-1
+    return dummy.next
+```
+
+
+

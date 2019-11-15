@@ -1,0 +1,46 @@
+93. Restore IP Addresses
+Medium
+
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+Example:
+
+Input: "25525511135"
+Output: ["255.255.11.135", "255.255.111.35"]
+
+```python
+class Solution(object):
+    def restoreIpAddresses(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+```
+
+1st answer. Runtime: 20 ms, faster than 80.20% of Python online submissions for Restore IP Addresses.
+Memory Usage: 11.9 MB, less than 25.00% of Python online submissions for Restore IP Addresses.
+```python
+def restoreIpAddresses(s):
+    if 12<len(s)<4: return []
+    ans=[]
+    def func(s,cur):
+        if not s and len(cur)==4:
+            ans.append('.'.join(cur))
+            return
+        if not s or len(cur)==4: return
+        if s[0]=='0':
+            func(s[1:],cur+['0'])
+        else:
+            for i in range(len(s)):
+                t=s[:i+1]
+                if int(t)<256: func(s[i+1:],cur+[t])
+                else: break
+    func(s,[])
+    return ans
+```
+
+"0255110135" == ["0.255.110.135"]
+
+"25525511135" == ["255.255.11.135", "255.255.111.35"]
+
+"25000" == ["2.50.0.0","25.0.0.0"]

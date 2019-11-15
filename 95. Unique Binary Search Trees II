@@ -1,0 +1,74 @@
+95. Unique Binary Search Trees II
+Medium
+
+Given an integer n, generate all structurally unique BST's (binary search trees) that store values 1 ... n.
+
+Example:
+
+Input: 3
+Output:
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+Explanation:
+The above output corresponds to the 5 unique BST's shown below:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def generateTrees(self, n):
+        """
+        :type n: int
+        :rtype: List[TreeNode]
+        """
+```
+
+Runtime: 32 ms, faster than 94.72% of Python online submissions for Unique Binary Search Trees II.
+Memory Usage: 15.3 MB, less than 12.50% of Python online submissions for Unique Binary Search Trees II.
+```python
+def generateTrees(n):
+    def func(arr):
+        if not arr: return []
+        if len(arr)==1: return [TreeNode(arr[0])]
+        res=[]
+        for i,v in enumerate(arr):
+            ls=func(arr[:i])
+            rs=func(arr[i+1:])
+            if not ls and not rs:
+                res.append(TreeNode(v))
+            elif not rs:
+                for l in ls:
+                    n=TreeNode(v)
+                    n.left=l
+                    res.append(n)
+            elif not ls:
+                for r in rs:
+                    n=TreeNode(v)
+                    n.right=r
+                    res.append(n)
+            else:
+                for l in ls:
+                    for r in rs:
+                        n=TreeNode(v)
+                        n.left,n.right=l,r
+                        res.append(n)
+        return res
+    return func([i+1 for i in range(n)])
+```
