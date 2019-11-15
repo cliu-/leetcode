@@ -23,6 +23,24 @@ class Solution(object):
         """
         :type n: int
         :rtype: int
-        """
-        
+        """ 
+```
+
+Runtime: 16 ms, faster than 71.17% of Python online submissions for Unique Binary Search Trees.
+Memory Usage: 11.7 MB, less than 54.55% of Python online submissions for Unique Binary Search Trees.
+```python
+def numTrees(n):
+    map={0:0,1:1}
+    def func(n):
+        if n in map: return map[n]
+        ans=0
+        for i in range(n):
+            l=func(i)
+            r=func(n-i-1)
+            if l==0 or r==0:
+                ans+=(l+r)
+            ans+=l*r
+        map[n]=ans
+        return map[n]
+    return func(n)
 ```
