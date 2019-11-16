@@ -1,0 +1,73 @@
+101. Symmetric Tree
+Easy
+
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+For example, this binary tree [1,2,2,3,4,4,3] is symmetric:
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+ 
+
+But the following [1,2,2,null,3,null,3] is not:
+
+    1
+   / \
+  2   2
+   \   \
+   3    3
+ 
+
+Note:
+Bonus points if you could solve it both recursively and iteratively.
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+```
+
+1st answer, wrong answer. The problem is mirror tree, not the same tree.
+```python
+def isSymmetric(root):
+    if not root: return True
+    def func(p,q):
+        if not p and not q: return True
+        if not p or not q: return False
+        l=func(p.left,q.left)
+        r=func(p.right,q.right)
+        return l&r
+    return func(root.left,root.right)
+```
+
+```python
+def isSymmetric(root):
+    def func(arr):
+        l,r=0,len(arr)-1
+        while l<r:
+            if arr[l]==arr[r]==None:
+                continue
+            if arr[l] and arr[r] and arr[l].val==arr[r].val:
+                continue
+            return False 
+        newarr=[]
+        for e in arr:
+            if e:
+                newarr.append(e.left if e.left else None)
+                newarr.append(e.right if e.right else None)
+```
+
+
