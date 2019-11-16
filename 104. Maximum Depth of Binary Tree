@@ -1,0 +1,65 @@
+104. Maximum Depth of Binary Tree
+Easy
+
+Given a binary tree, find its maximum depth.
+
+The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Given binary tree [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its depth = 3.
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+```
+
+1st answer. accepted, but the space complexity is O(N).
+```python
+from collections import deque
+def maxDepth(root):
+    if not root: return 0
+    q,ans=deque([root]),0
+    while q:
+        l,ans=len(q),ans+1
+        for _ in xrange(l):
+            e=q.popleft()
+            if e.left: q.append(e.left)
+            if e.right: q.append(e.right)
+    return ans
+```
+
+2nd answer. The space complexity is O(logN).
+Runtime: 28 ms, faster than 79.29% of Python online submissions for Maximum Depth of Binary Tree.
+Memory Usage: 15.3 MB, less than 6.17% of Python online submissions for Maximum Depth of Binary Tree.
+```python
+def maxDepth(root):
+    def func(n):
+        if not root: return 0
+        l,r=0,0
+        if n.left: l=func(n.left)
+        if n.right: r=func(n.right)
+        return 1+max(l,r)
+    return func(root)
+```
