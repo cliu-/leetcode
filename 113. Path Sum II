@@ -39,3 +39,20 @@ class Solution(object):
         :rtype: List[List[int]]
         """
 ```
+
+Runtime: 32 ms, faster than 85.88% of Python online submissions for Path Sum II.Memory Usage: 14.7 MB, less than 64.29% of Python online submissions for Path Sum II.
+```python
+def pathSum(root, sum):
+    ans=[]
+    def func(n,v,cur=[]):
+        if not n: return
+        if n.val==v and not n.left and not n.right:
+            ans.append(cur+[v])
+            return
+        cur.append(n.val)
+        if n.left: func(n.left,v-n.val)
+        if n.right: func(n.right,v-n.val)
+        cur.pop()
+    func(root, sum)
+    return ans
+```
