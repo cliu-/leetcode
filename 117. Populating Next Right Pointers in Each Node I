@@ -1,0 +1,80 @@
+117. Populating Next Right Pointers in Each Node II
+Medium
+
+Given a binary tree
+
+```
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+
+Example:
+
+![alt](116_sample.png)
+
+```
+Input: {"$id":"1","left":{"$id":"2","left":{"$id":"3","left":null,"next":null,"right":null,"val":4},"next":null,"right":{"$id":"4","left":null,"next":null,"right":null,"val":5},"val":2},"next":null,"right":{"$id":"5","left":null,"next":null,"right":{"$id":"6","left":null,"next":null,"right":null,"val":7},"val":3},"val":1}
+
+Output: {"$id":"1","left":{"$id":"2","left":{"$id":"3","left":null,"next":{"$id":"4","left":null,"next":{"$id":"5","left":null,"next":null,"right":null,"val":7},"right":null,"val":5},"right":null,"val":4},"next":{"$id":"6","left":null,"next":null,"right":{"$ref":"5"},"val":3},"right":{"$ref":"4"},"val":2},"next":null,"right":{"$ref":"6"},"val":1}
+
+Explanation: Given the above binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B.
+```
+
+Note:
+
+- You may only use constant extra space.
+- Recursive approach is fine, implicit stack space does not count as extra space for this problem.
+
+```python
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val, left, right, next):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+class Solution(object):
+    def connect(self, root):
+        """
+        :type root: Node
+        :rtype: Node
+        """
+```
+
+The O(N) space complexity solution is the same as #116, it's trival, do not need to list here.
+Below is the O(1) space complexity solution.
+Runtime: 440 ms, faster than 52.04% of Python online submissions for Populating Next Right Pointers in Each Node II.
+Memory Usage: 55.1 MB, less than 9.09% of Python online submissions for Populating Next Right Pointers in Each Node II.
+```python
+def connect(root):
+    if not root: return root
+    p=root
+    while p:
+        if not p.left and not p.right: p=p.next
+        else:
+            cur,tmp=p,None
+            while cur:
+                if not cur.left and not cur.right: cur=cur.next
+                else:
+                    n=cur.left if cur.left else cur.right
+                    if tmp: tmp.next=n
+                    if cur.left and cur.right:
+                        cur.left.next=cur.right
+                        tmp=cur.right
+                    else: tmp=n
+                    cur=cur.next
+            p=p.left if p.left else p.right
+    return root
+```
+
+{"$id":"1","left":{"$id":"2","left":{"$id":"3","left":{"$id":"4","left":null,"next":null,"right":null,"val":7},"next":null,"right":null,"val":4},"next":null,"right":{"$id":"5","left":null,"next":null,"right":null,"val":5},"val":2},"next":null,"right":{"$id":"6","left":null,"next":null,"right":{"$id":"7","left":null,"next":null,"right":{"$id":"8","left":null,"next":null,"right":null,"val":8},"val":6},"val":3},"val":1}
