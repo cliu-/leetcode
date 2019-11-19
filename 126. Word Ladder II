@@ -1,0 +1,106 @@
+126. Word Ladder II
+Hard
+
+Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
+
+Only one letter can be changed at a time
+Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
+Note:
+
+Return an empty list if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+You may assume no duplicates in the word list.
+You may assume beginWord and endWord are non-empty and are not the same.
+Example 1:
+
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output:
+[
+  ["hit","hot","dot","dog","cog"],
+  ["hit","hot","lot","log","cog"]
+]
+Example 2:
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: []
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+```python
+class Solution(object):
+    def findLadders(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: List[List[str]]
+        """
+```
+
+```python
+from collections import defaultdict
+def findLadders(beginWord, endWord, wordList):
+    ws=set(wordList)
+    if not wordList or endWord not in ws: return []
+    ws.add(endWord)
+    level,parents={beginWord},defaultdict(set)
+    while level and endWord not in parents:
+        next_level=defaultdict(set)
+        for n in level:
+            for char in string.ascii_lowercase:
+                for i in range(len(beginWord)):
+                    nw = n[:i]+char+n[i+1:]
+                    if nw in ws and nw not in parents:
+                        next_level[nw].add(n)
+        level=next_level
+        parents.update(next_level)
+        print('next_leve={}\nparents={}'.format(next_level,parents))
+    if endWord not in parents: return []
+    ans=[]
+    def func(w, target, cur=[]):
+        if w==target:
+            ans.append([target]+cur[::-1])
+        else:
+            cur.append(w)
+            for t in parents[w]:
+                func(t,target,cur)
+            cur.pop()
+    func(endWord,beginWord)
+    return ans
+```
+
+```
+"hit"
+"cog"
+["hot","dot","dog","lot","log","cog"]
+
+next_leve=defaultdict(<type 'set'>, {u'hot': set([u'hit'])})
+parents=defaultdict(<type 'set'>, {u'hot': set([u'hit'])})
+
+next_leve=defaultdict(<type 'set'>, {u'lot': set([u'hot']), u'dot': set([u'hot'])})
+parents=defaultdict(<type 'set'>, {u'hot': set([u'hit']), u'dot': set([u'hot']), u'lot': set([u'hot'])})
+
+next_leve=defaultdict(<type 'set'>, {u'log': set([u'lot']), u'dog': set([u'dot'])})
+parents=defaultdict(<type 'set'>, {u'hot': set([u'hit']), u'dog': set([u'dot']), u'dot': set([u'hot']), u'lot': set([u'hot']), u'log': set([u'lot'])})
+
+next_leve=defaultdict(<type 'set'>, {u'cog': set([u'log', u'dog'])})
+parents=defaultdict(<type 'set'>, {u'cog': set([u'log', u'dog']), u'hot': set([u'hit']), u'log': set([u'lot']), u'lot': set([u'hot']), u'dog': set([u'dot']), u'dot': set([u'hot'])})
+```
+
+```
+"lost"
+"miss"
+["most","mist","miss","lost","fist","fish"]
+
+[["lost","most","mist","miss"]]
+```

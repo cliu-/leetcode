@@ -1,0 +1,42 @@
+128. Longest Consecutive Sequence
+Hard
+
+Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+Your algorithm should run in O(n) complexity.
+
+Example:
+
+Input: [100, 4, 200, 1, 3, 2]
+Output: 4
+Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+
+
+```python
+class Solution(object):
+    def longestConsecutive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+```
+
+
+Runtime: 44 ms, faster than 53.72% of Python online submissions for Longest Consecutive Sequence.
+Memory Usage: 12.6 MB, less than 80.00% of Python online submissions for Longest Consecutive Sequence.
+```python
+def longestConsecutive(nums):
+    ss,ans=set(nums),0
+    while ss:
+        l,n=1,ss.pop()
+        p=n
+        while p-1 in ss: 
+            p,l=p-1,l+1
+            ss.remove(p)
+        p=n
+        while p+1 in ss:
+            p,l=p+1,l+1
+            ss.remove(p)
+        ans=max(ans,l)
+    return ans
+```
