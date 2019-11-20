@@ -39,6 +39,7 @@ Output: 0
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
 ```
 
+
 ```python
 class Solution(object):
     def ladderLength(self, beginWord, endWord, wordList):
@@ -49,3 +50,60 @@ class Solution(object):
         :rtype: int
         """
 ```
+
+Same solution as #126
+Runtime: 456 ms, faster than 26.08% of Python online submissions for Word Ladder.
+Memory Usage: 13.9 MB, less than 54.05% of Python online submissions for Word Ladder.
+```python
+def ladderLength(beginWord, endWord, wordList):
+    ws=set(wordList)
+    if not ws or endWord not in ws: return 0
+    ws.add(beginWord)
+    level,parents={beginWord},defaultdict(set)
+    while level and endWord not in parents:
+        next_level=defaultdict(set)
+        for node in level:
+            for j in range(len(node)):
+                for c in string.ascii_lowercase:
+                    n=node[:j]+c+node[j+1:]
+                    if n in ws and n not in parents:
+                        next_level[n].add(node)
+        level=next_level
+        parents.update(next_level)
+    if endWord not in parents: return 0
+    ans,t=1,endWord
+    while t!=beginWord:
+        t,ans=parents[t].pop(),ans+1
+    return ans
+```
+
+
+This approach should be reviewed.
+Runtime: 76 ms, faster than 98.52% of Python online submissions for Word Ladder.
+Memory Usage: 12.7 MB, less than 97.30% of Python online submissions for Word Ladder.
+```python
+def ladderLength(beginWord, endWord, wordList):
+    ws=set(wordList)
+    if not ws or endWord not in ws: return 0
+    ws.add(beginWord)
+    q1,q2,step={beginWord},{endWord},1
+    while q1 and q2:
+        if len(q1)>len(q2): q1,q2=q2,q1
+        q=set()
+        for n in q1:
+            for i in range(len(n)):
+                for c in string.ascii_lowercase:
+                    nw=n[:i]+c+n[i+1:]
+                    if nw in q2:
+                        return step+1
+                    if nw in ws:
+                        q.add(nw)
+                        ws.remove(nw)
+        q1,step=q,step+1
+    return 0
+```
+
+
+"hot"
+"dog"
+["hot","dog"]
