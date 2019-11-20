@@ -43,8 +43,60 @@ class Solution(object):
         """
 ```
 
+1st answer failed at case `[5,4,8,11,null,13,4,7,2,null,null,null,1]`.
 ```python
 def maxPathSum(root):
+    ans=[-2**32]
     def func(p):
-        if p
+        l=r=-2**32
+        if p.left: l=func(p.left)
+        if p.right: r=func(p.right)
+        m=max([p.val,l+p.val,r+p.val,l+r+p.val])
+        ans[0]=max([ans[0],l,r,m])
+        return m
+    func(root)
+    return ans[0]
 ```
+
+
+Runtime: 96 ms, faster than 16.84% of Python online submissions for Binary Tree Maximum Path Sum.
+Memory Usage: 26.2 MB, less than 25.00% of Python online submissions for Binary Tree Maximum Path Sum.
+```python
+def maxPathSum(root):
+    ans=[-2**32]
+    def func(p,cur=[-2**32]):
+        l=r=-2**32
+        cur[0]+=p.val
+        if p.left: l=func(p.left,cur)
+        if p.right: r=func(p.right,cur)
+        m=max([p.val,l+p.val,r+p.val])
+        ans[0]=max(ans[0],p.val,l,r,l+p.val,r+p.val,l+r+p.val,l+cur[0],r+cur[0])
+        cur[0]-=p.val
+        return m
+    func(root)
+    return ans[0]
+```
+
+Make code more clean and neat.
+Runtime: 68 ms, faster than 98.52% of Python online submissions for Binary Tree Maximum Path Sum.
+Memory Usage: 24.8 MB, less than 62.50% of Python online submissions for Binary Tree Maximum Path Sum.
+```python
+def maxPathSum(root):
+    ans=[-2**32]
+    def func(p):
+        l=r=0
+        if p.left: l=max(func(p.left),0)
+        if p.right: r=max(func(p.right),0)
+        ans[0]=max(ans[0],p.val+l+r)
+        return p.val+max(l,r)
+    func(root)
+    return ans[0]
+```
+
+[1,2,3] == 6
+
+[-10,9,20,null,null,15,7] == 42
+
+[5,4,8,11,null,13,4,7,2,null,null,null,1] == 48
+
+[-2,-1] == -1

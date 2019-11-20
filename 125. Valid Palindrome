@@ -1,0 +1,74 @@
+125. Valid Palindrome
+Easy
+
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+Note: For the purpose of this problem, we define empty string as valid palindrome.
+
+Example 1:
+```
+Input: "A man, a plan, a canal: Panama"
+Output: true
+```
+
+Example 2:
+```
+Input: "race a car"
+Output: false
+```
+
+
+```python
+class Solution(object):
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+```
+
+1st answer, failed at case `"0P"`, the problem description is `considering only alphanumeric characters`.
+```python
+def isPalindrome(s):
+    if not s: return True
+    l,r=0,len(s)-1
+    while l<r:
+        sl,sr=ord(s[l]),ord(s[r])
+        if not (64<sl<91 or 96<sl<123): 
+            l=l+1
+            continue
+        if not (64<sr<91 or 96<sr<123): 
+            r=r-1
+            continue
+        if sl==sr or (sl>sr and sl-32==sr) or (sl<sr and sl==sr-32):
+            l,r=l+1,r-1
+            continue
+        return False
+    return True
+```
+
+
+Runtime: 52 ms, faster than 30.42% of Python online submissions for Valid Palindrome.
+Memory Usage: 12.5 MB, less than 88.24% of Python online submissions for Valid Palindrome.
+```python
+def isPalindrome(s):
+    if not s: return True
+    ss=(set([chr(n) for n in xrange(97,123)])
+        |set([chr(n) for n in xrange(65,91)])
+        |set([str(n) for n in xrange(0,10)]))
+    l,r=0,len(s)-1
+    while l<r:
+        if s[l] not in ss: 
+            l=l+1
+            continue
+        if s[r] not in ss: 
+            r=r-1
+            continue
+        if s[l].lower()!=s[r].lower(): return False
+        l,r=l+1,r-1
+    return True
+```
+
+
+
+"0P"

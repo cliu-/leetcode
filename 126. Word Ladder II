@@ -1,0 +1,98 @@
+126. Word Ladder II
+Hard
+
+Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
+
+Only one letter can be changed at a time
+Each transformed word must exist in the word list. Note that beginWord is not a transformed word.
+Note:
+
+Return an empty list if there is no such transformation sequence.
+All words have the same length.
+All words contain only lowercase alphabetic characters.
+You may assume no duplicates in the word list.
+You may assume beginWord and endWord are non-empty and are not the same.
+
+Example 1:
+```
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output:
+[
+  ["hit","hot","dot","dog","cog"],
+  ["hit","hot","lot","log","cog"]
+]
+```
+
+Example 2:
+```
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: []
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+```
+
+```python
+class Solution(object):
+    def findLadders(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: List[List[str]]
+        """
+```
+
+
+```python
+from collections import defaultdict
+def findLadders(beginWord, endWord, wordList):
+    wl=[beginWord]+wordList
+    def cgraph(beginWord, wordList):
+        graph=defaultdict(set)
+        alph=[set() for _ in xrange(26)]
+        for i,w in enumerate(wl):
+            for c in w:
+                alph[ord(c)-97].add(i)
+        for i,w in enumerate(wl):
+            ss=set()
+            for j in range(len(w)):
+                tmp,res=w[:j]+w[j+1:],set([_ for _ in range(len(wl))])
+                for k in tmp:
+                    res&=alph[ord(k)-97]
+                ss|=res
+            graph[w]=ss
+        return graph
+    graph=cgraph(beginWord, wordList)
+    ans=[]
+    def vgraph(word,end,visited=set(),cur=[]):
+        if word in visited: return
+        if word==end:
+            ans.append(cur+[end])
+        else:
+            visited.add(word)
+            cur.append(word)
+            ls=graph[word]
+            for i in ls:
+                vgraph(wl[i],end,visited,cur)
+            cur.pop()
+            visited.remove(word)
+    vgraph(beginWord,endWord)
+    l=min([len(a) for a in ans])
+    return [a for a in ans if len(a)==l]
+```
+
+
+findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"])
+
+
+"leet"
+"code"
+["lest","leet","lose","code","lode","robe","lost"]
