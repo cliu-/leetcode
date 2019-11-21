@@ -1,0 +1,89 @@
+133. Clone Graph
+Medium
+
+Given a reference of a node in a connected undirected graph, return a deep copy (clone) of the graph. Each node in the graph contains a val (int) and a list (List[Node]) of its neighbors.
+
+Example:
+
+![Alt text](133_clone_graph_question.png)
+
+Input:
+{"$id":"1","neighbors":[{"$id":"2","neighbors":[{"$ref":"1"},{"$id":"3","neighbors":[{"$ref":"2"},{"$id":"4","neighbors":[{"$ref":"3"},{"$ref":"1"}],"val":4}],"val":3}],"val":2},{"$ref":"4"}],"val":1}
+
+Explanation:
+Node 1's value is 1, and it has two neighbors: Node 2 and 4.
+Node 2's value is 2, and it has two neighbors: Node 1 and 3.
+Node 3's value is 3, and it has two neighbors: Node 2 and 4.
+Node 4's value is 4, and it has two neighbors: Node 1 and 3.
+ 
+
+Note:
+
+1. The number of nodes will be between 1 and 100.
+2. The undirected graph is a simple graph, which means no repeated edges and no self-loops in the graph.
+3. Since the graph is undirected, if node p has node q as neighbor, then node q must have node p as neighbor too.
+4. You must return the copy of the given node as a reference to the cloned graph.
+
+```python
+"""
+# Definition for a Node.
+class Node(object):
+    def __init__(self, val, neighbors):
+        self.val = val
+        self.neighbors = neighbors
+"""
+class Solution(object):
+    def cloneGraph(self, node):
+        """
+        :type node: Node
+        :rtype: Node
+        """
+```
+
+1st solution, BFS with iteration. Runtime: 68 ms, faster than 6.72% of Python online submissions for Clone Graph. Memory Usage: 12.9 MB, less than 12.50% of Python online submissions for Clone Graph.
+```python
+from collections import deque
+def cloneGraph(node):
+    q,visited=deque([node]),set()
+    map={node:Node(node.val,[])}
+    while q:
+        ql=len(q)
+        for _ in xrange(ql):
+            n=q.popleft()
+            if n in visited: continue
+            print('visiting: {}'.format(n.val))
+            cn=map[n]
+            for neighbor in n.neighbors:
+                if neighbor not in map: 
+                    map[neighbor]=Node(neighbor.val, [])
+                cneighbor=map[neighbor]
+                cn.neighbors.append(cneighbor)
+                q.append(neighbor)
+            visited.add(n)
+    return map[node]
+```
+
+1st solution, DFS with recursion. Runtime: 52 ms, faster than 90.12% of Python online submissions for Clone Graph.
+Memory Usage: 12.8 MB, less than 56.25% of Python online submissions for Clone Graph.
+```python
+def cloneGraph(node):
+    map={node:Node(node.val,[])}
+    def dfs(n, visited=set()):
+        if n in visited: return
+        cn=map[n]
+        visited.add(n)
+        for neighbor in n.neighbors:
+            if neighbor not in map: 
+                map[neighbor]=Node(neighbor.val, [])
+            cn.neighbors.append(map[neighbor])
+            dfs(neighbor,visited)
+    dfs(node)
+    return map[node]
+```
+
+
+{"$id":"1","neighbors":[{"$id":"2","neighbors":[{"$ref":"1"},{"$id":"3","neighbors":[{"$ref":"2"},{"$id":"4","neighbors":[{"$ref":"3"},{"$ref":"1"}],"val":4}],"val":3}],"val":2},{"$ref":"4"}],"val":1}
+
+
+{"$id":"1","neighbors":[{"$id":"2","neighbors":[{"$ref":"1"},{"$ref":"1"},{"$id":"3","neighbors":[{"$ref":"2"},{"$id":"4","neighbors":[{"$ref":"1"},{"$ref":"3"},{"$ref":"1"},{"$ref":"3"}],"val":4},{"$ref":"2"},{"$ref":"4"}],"val":3},{"$ref":"3"}],"val":2},{"$ref":"4"},{"$ref":"2"},{"$ref":"4"}],"val":1}
+
