@@ -1,0 +1,54 @@
+136. Single Number
+Easy
+
+Given a non-empty array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+Example 1:
+```
+Input: [2,2,1]
+Output: 1
+```
+
+Example 2:
+```
+Input: [4,1,2,1,2]
+Output: 4
+```
+
+
+```python
+class Solution(object):
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+```
+
+Space complexity O(N), time complexity O(N).
+Runtime: 80 ms, faster than 25.23% of Python online submissions for Single Number. Memory Usage: 13.9 MB, less than 35.13% of Python online submissions for Single Number.
+```python
+def singleNumber(nums):
+    ss=set()
+    for n in nums:
+        if n in ss:
+            ss.remove(n)
+        else:
+            ss.add(n)
+    return ss.pop()
+```
+
+In bitwise operation, `n^n==0`.
+Runtime: 72 ms, faster than 57.85% of Python online submissions for Single Number.
+Memory Usage: 13.6 MB, less than 71.62% of Python online submissions for Single Number.
+```python
+def singleNumber(nums):
+    t=0
+    for n in nums:
+        t=t^n
+    return t
+```
