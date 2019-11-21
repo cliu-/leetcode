@@ -1,0 +1,98 @@
+131. Palindrome Partitioning
+Medium
+
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+Example:
+
+Input: "aab"
+Output:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+
+
+```python
+class Solution(object):
+    def partition(self, s):
+        """
+        :type s: str
+        :rtype: List[List[str]]
+        """
+```
+
+1st solution, wrong answer, I cannot remove the duplicated result from the final result set in this approach.
+```python
+def partition(s):
+    def func(s):
+        if not s: return []
+        res=[]
+        if s==s[::-1]: res.append([s])
+        for i in range(1,len(s)):
+            l=func(s[:i])
+            r=func(s[i:])
+            res.extend(list(set([le+re for le in l for re in r]))
+        return res
+    return func(s)
+```
+
+2nd solution.
+The idea is, find all palindrome substring from every index of the input string. For example, input string is `ababa`, for the index `0`, we can find the palindrome substring `['a'], ['aba'], ['ababa']`, and for the index `1`, we can find the palindrome substring `['b'],['bab']`...
+Then we can combine the substrings for the final result.
+
+Runtime: 40 ms, faster than 99.65% of Python online submissions for Palindrome Partitioning.
+Memory Usage: 12.2 MB, less than 70.59% of Python online submissions for Palindrome Partitioning.
+```python
+def partition(s):
+    if not s: return [[]]
+    map=defaultdict(list)
+    for i in range(len(s)):
+        for j in range(i+1,len(s)+1):
+            sub=s[i:j]
+            if sub==sub[::-1]:
+                map[i].append(sub)
+    ans=[]
+    def func(s,i=0,cur=[]):
+        if i==len(s) and cur:
+            ans.append(cur[::])
+            return
+        for e in map[i]:
+            cur.append(e)
+            func(s,i+len(e),cur)
+            cur.pop()
+    func(s)
+    return ans
+```
+
+The problem of 2nd solution is, it spend much time to find the palindrome substring for each index. We can use the one of the palindrome string property to optimize the time complexity.
+1. for a palindrome substring `s[i:j]`, the substring `s[i+1,j-1]` is a palindrome string.
+2. if a substring(s[i:j]) is a palindrome string and s[i-1]==s[j], the substring s[i-1:j+1] is a palindrome.
+Runtime: 36 ms, faster than 100.00% of Python online submissions for Palindrome Partitioning.
+Memory Usage: 12.1 MB, less than 82.35% of Python online submissions for Palindrome Partitioning.
+```python
+def partition(s):
+    if not s: return [[]]
+    map,memo=defaultdict(list),set()
+    for r in range(len(s)):
+        for l in range(r+1):
+            if s[l]==s[r] and (r-l<=1 or (l+1,r-1) in memo):
+                map[l].append(s[l:r+1])
+                memo.add((l,r))
+    ans=[]
+    def func(s,i=0,cur=[]):
+        if i==len(s) and cur:
+            ans.append(cur[::])
+            return
+        for e in map[i]:
+            cur.append(e)
+            func(s,i+len(e),cur)
+            cur.pop()
+    func(s)
+    return ans
+```
+
+
+[["ababa"],["a","b","aba"],["a","b","a","b","a"],["a","b","a","b","a"],["a","b","a","b","a"],["a","bab","a"],["a","b","a","b","a"],["a","b","a","b","a"],["a","b","aba"],["a","b","a","b","a"],["a","b","a","b","a"],["aba","b","a"],["a","b","a","b","a"],["a","b","a","b","a"],["a","bab","a"],["a","b","a","b","a"],["a","b","a","b","a"],["a","b","a","b","a"],["aba","b","a"],["a","b","a","b","a"],["a","b","a","b","a"]]
