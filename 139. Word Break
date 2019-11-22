@@ -7,17 +7,20 @@ Note:
 
 The same word in the dictionary may be reused multiple times in the segmentation.
 You may assume the dictionary does not contain duplicate words.
+
 Example 1:
 
 Input: s = "leetcode", wordDict = ["leet", "code"]
 Output: true
 Explanation: Return true because "leetcode" can be segmented as "leet code".
+
 Example 2:
 
 Input: s = "applepenapple", wordDict = ["apple", "pen"]
 Output: true
 Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
              Note that you are allowed to reuse a dictionary word.
+
 Example 3:
 
 Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
@@ -33,3 +36,38 @@ class Solution(object):
         :rtype: bool
         """
 ```
+
+Time limit exceeded at case `"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab", ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"]`
+```python
+def wordBreak(s, wordDict):
+    if not s: return False
+    ws,arr=set(wordDict),[0]
+    for i in range(1,len(s)+1):
+        tmp=[]
+        for j in arr:
+            if s[j:i] in ws:
+                tmp.append(i)
+        arr.extend(tmp)
+    return arr[-1]==len(s)
+```
+
+DP solution.
+Runtime: 40 ms, faster than 14.42% of Python online submissions for Word Break. Memory Usage: 12 MB, less than 21.28% of Python online submissions for Word Break.
+```python
+def wordBreak(s, wordDict):
+    if not s: return False
+    ws,dp=set(wordDict),[[-1]*(len(s)+1) for _ in range(len(s)+1)]
+    for i in range(len(dp)): dp[i][0]=0
+    for i in range(1,len(dp)):
+        for j in range(1,len(dp[0])):
+            if j<i: dp[i][j]=dp[i-1][j]
+            else:
+                if s[i-1:j] in ws and dp[i][i-1]>-1:
+                    dp[i][j]=i
+                else:
+                    dp[i][j]=dp[i-1][j]
+    return dp[-1][-1]>-1
+
+```
+
+wordBreak('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab', ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"])
