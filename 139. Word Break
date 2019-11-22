@@ -67,7 +67,21 @@ def wordBreak(s, wordDict):
                 else:
                     dp[i][j]=dp[i-1][j]
     return dp[-1][-1]>-1
+```
 
+Optimize, actually, for above dp approach, just 1D array is enough.
+Runtime: 16 ms, faster than 98.01% of Python online submissions for Word Break.
+Memory Usage: 11.9 MB, less than 68.08% of Python online submissions for Word Break.
+```python
+def wordBreak(s, wordDict):
+    if not s: return False
+    ws,dp=set(wordDict),[-1]*(len(s)+1)
+    dp[0]=0
+    for r in range(len(s)+1):
+        for l in range(r+1):
+            if s[l:r] in ws and dp[l]>-1:
+                dp[r]=l+1
+    return dp[-1]>-1
 ```
 
 wordBreak('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab', ["a","aa","aaa","aaaa","aaaaa","aaaaaa","aaaaaaa","aaaaaaaa","aaaaaaaaa","aaaaaaaaaa"])
