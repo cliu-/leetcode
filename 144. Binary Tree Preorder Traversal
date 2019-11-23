@@ -1,0 +1,60 @@
+144. Binary Tree Preorder Traversal
+Medium
+
+Given a binary tree, return the preorder traversal of its nodes' values.
+
+Example:
+
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [1,2,3]
+Follow up: Recursive solution is trivial, could you do it iteratively?
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def preorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+```
+
+```python
+def preorderTraversal(root):
+    ans=[]
+    def func(root):
+        if not root: return
+        ans.append(root.val)
+        func(root.left)
+        func(root.right)
+    func(root)
+    return ans
+```
+
+
+Runtime: 20 ms, faster than 40.82% of Python online submissions for Binary Tree Preorder Traversal. Memory Usage: 11.8 MB, less than 22.86% of Python online submissions for Binary Tree Preorder Traversal.
+```python
+def preorderTraversal(root):
+    if not root: return []
+    s,p,ans=[],root,[]
+    while s or p:
+        if not p: p=stack.pop()
+        ans.append(p.val)
+        if p.right:
+            s.append(p.right)
+        p=p.left
+    return ans
+```

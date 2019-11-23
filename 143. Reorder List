@@ -47,14 +47,30 @@ def reorderList(head):
 ```
 
 O(1) space solution.
+Runtime: 84 ms, faster than 71.86% of Python online submissions for Reorder List.
+Memory Usage: 29.5 MB, less than 88.89% of Python online submissions for Reorder List.
 ```python
 def reorderList(head):
+    if not head: return None
     ## find mid node.
     p1=p2=head
     while p2 and p2.next:
         p2=p2.next.next
         p1=p1.next
-    ## reverse the list from p1.
-    l=p1.next
-    while
+    ## reverse the list from p1.next to the end.
+    cur,pre=p1.next,None
+    while cur:
+        n_cur=cur.next
+        cur.next=pre
+        pre=cur
+        cur=n_cur
+    p1.next=pre
+    ## merge list [p1.next->end] to [start->p1]
+    cur,p1.next,p=p1.next,None,head
+    while cur:
+        n_p,n_cur=p.next,cur.next
+        p.next=cur
+        cur.next=n_p
+        p,cur=n_p,n_cur
+    return head
 ```
