@@ -1,0 +1,94 @@
+148. Sort List
+Medium
+
+Sort a linked list in O(n log n) time using constant space complexity.
+
+Example 1:
+
+Input: 4->2->1->3
+Output: 1->2->3->4
+Example 2:
+
+Input: -1->5->3->4->0
+Output: -1->0->3->4->5
+
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def sortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+```
+
+quick sort solution.
+```python
+def sortList(head):
+    def func(pre,pivot,end):
+        e,pivot.next=pivot.next,None
+        while e!=end:
+            ne,e.next=e.next,None
+            if e.val<=pivot.val:
+                if pre: pre.next=e
+                e.next,pre=pivot,e
+            else:
+                np=pivot.next
+                pivot.next,e.next=e,np
+            e=ne
+
+```
+
+
+merge sort solution.
+Runtime: 248 ms, faster than 36.76% of Python online submissions for Sort List.
+Memory Usage: 26.1 MB, less than 100.00% of Python online submissions for Sort List.
+```python
+def sortList(head):
+    def arr(p):
+        a=[]
+        while p:
+            a.append(p.val)
+            p=p.next
+        return a
+    if not head: return head
+    def sort(n):
+        print('sort: {}'.format(arr(n)))
+        if not n.next: return n
+        if not n.next.next:
+            p1,p2=n,n.next
+            if p1.val<=p2.val:
+                return p1
+            else:
+                p2.next,p1.next=p1,None
+                return p2
+        p1=p2=n
+        while p2 and p2.next:
+            p1,p2=p1.next,p2.next.next
+        nn,p1.next=p1.next,None
+        print('n={};nn={}'.format(arr(n),arr(nn)))
+        left=sort(n)
+        right=sort(nn)
+        print('left={};right={}'.format(arr(left),arr(right)))
+        return merge(n,nn)
+    def merge(n1,n2):
+        p1,p2,dummy=n1,n2,ListNode(-2**32)
+        p=dummy
+        while p1 and p2:
+            if p1.val<=p2.val: n,p1=p1,p1.next
+            else: n,p2=p2,p2.next
+            nn,n.next=n.next,None
+            p.next=n
+            p=p.next
+        if p1: p.next=p1
+        if p2: p.next=p2
+        print('merge out: {}'.format(arr(dummy.next)))
+        return dummy.next
+    return sort(head)
+```

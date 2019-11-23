@@ -1,0 +1,132 @@
+146. LRU Cache
+Medium
+
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+
+The cache is initialized with a positive capacity.
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+Example:
+```
+LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+```
+
+
+```python
+class LRUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+```
+
+Spent much time on debugging double linked list operations.
+Runtime: 212 ms, faster than 86.24% of Python online submissions for LRU Cache.
+Memory Usage: 22.1 MB, less than 8.89% of Python online submissions for LRU Cache.
+```python
+class Node(object):
+    def __init__(self,key,val):
+        self.key=key
+        self.val=val
+        self.pre=None
+        self.next=None
+    def __str__(self):
+        p,a=self,[]
+        while p:
+            strp='{}:{}'.format(p.pre.key,p.pre.val) if p.pre else 'null'
+            a.append('{}<-{}:{}'.format(strp, p.key,p.val))
+            p=p.next
+        return str(a)
+
+class LRUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.map,self.c={},capacity
+        self.head,self.tail=None,None   
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        print('get{}'.format(key))
+        if key not in self.map: return -1
+        node=self.map[key]
+        if node!=self.head:
+            pre,next=node.pre,node.next
+            pre.next=next
+            if next: next.pre=pre
+            else: self.tail=pre
+            node.next,self.head.pre,node.pre=self.head,node,None
+            self.head=node
+        print(self.head)
+        return self.head.val
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        print('put{}:{}'.format(key,value))
+        if key not in self.map:
+            print(self.head)
+            node=Node(key,value)
+            self.map[key]=node
+            node.next=self.head
+            if self.head: self.head.pre=node
+            else: self.tail=node
+            self.head=node
+            print(node)
+            if len(self.map)>self.c:
+                self.map.pop(self.tail.key)
+                pre=self.tail.pre
+                self.tail.pre=None
+                pre.next=None
+                self.tail=pre
+        else:
+            self.map[key].val=value
+            self.get(key)
+        
+```
