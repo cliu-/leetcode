@@ -21,6 +21,8 @@ minStack.top();      --> Returns 0.
 minStack.getMin();   --> Returns -2.
 
 
+Runtime: 56 ms, faster than 63.87% of Python online submissions for Min Stack.
+Memory Usage: 15.5 MB, less than 91.11% of Python online submissions for Min Stack.
 ```python
 class MinStack(object):
 
@@ -28,6 +30,8 @@ class MinStack(object):
         """
         initialize your data structure here.
         """
+        self.stack=[]
+        self._min=2**32
         
 
     def push(self, x):
@@ -35,24 +39,34 @@ class MinStack(object):
         :type x: int
         :rtype: None
         """
+        if x<=self._min:
+            self.stack.append(self._min)
+            self._min=x
+        self.stack.append(x)
         
 
     def pop(self):
         """
         :rtype: None
         """
+        p=self.stack.pop()
+        if p==self._min:
+            self._min=self.stack.pop()
+        return p
         
 
     def top(self):
         """
         :rtype: int
         """
+        return self.stack[-1]
         
 
     def getMin(self):
         """
         :rtype: int
         """
+        return self._min
         
 
 
