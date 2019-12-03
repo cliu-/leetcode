@@ -1,0 +1,59 @@
+151. Reverse Words in a String
+Medium
+
+Given an input string, reverse the string word by word.
+
+Example 1:
+
+Input: "the sky is blue"
+Output: "blue is sky the"
+Example 2:
+
+Input: "  hello world!  "
+Output: "world! hello"
+Explanation: Your reversed string should not contain leading or trailing spaces.
+Example 3:
+
+Input: "a good   example"
+Output: "example good a"
+Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
+ 
+
+Note:
+
+A word is defined as a sequence of non-space characters.
+Input string may contain leading or trailing spaces. However, your reversed string should not contain leading or trailing spaces.
+You need to reduce multiple spaces between two words to a single space in the reversed string.
+ 
+
+Follow up:
+
+For C programmers, try to solve it in-place in O(1) extra space.
+
+
+```python
+class Solution(object):
+    def reverseWords(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+```
+
+Runtime: 36 ms, faster than 23.37% of Python online submissions for Reverse Words in a String.
+Memory Usage: 13.9 MB, less than 7.32% of Python online submissions for Reverse Words in a String.
+```python
+def reverseWords(s):
+    words,j=[],-1
+    for i in range(len(s)-1,-1,-1):
+        if s[i]==' ':
+            if j>-1:
+                words.append(s[i+1:j+1])
+                j=-1
+        else:
+            if j==-1:
+                j=i
+    if j>-1: words.append(s[0:j+1])
+    if not words: return ''
+    return ' '.join(words) 
+```
