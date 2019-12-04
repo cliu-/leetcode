@@ -1,0 +1,52 @@
+159. Longest Substring with At Most Two Distinct Characters
+Medium
+
+Given a string s , find the length of the longest substring t  that contains at most 2 distinct characters.
+
+Example 1:
+
+Input: "eceba"
+Output: 3
+Explanation: t is "ece" which its length is 3.
+Example 2:
+
+Input: "ccaabbb"
+Output: 5
+Explanation: t is "aabbb" which its length is 5.
+
+
+```python
+class Solution(object):
+    def lengthOfLongestSubstringTwoDistinct(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+```
+
+Runtime: 32 ms, faster than 96.41% of Python online submissions for Longest Substring with At Most Two Distinct Characters.
+Memory Usage: 12.1 MB, less than 27.27% of Python online submissions for Longest Substring with At Most Two Distinct Characters.
+```python
+def lengthOfLongestSubstringTwoDistinct(s):
+    if len(s)<3: return len(s)
+    start_idx=lst_idx=0
+    ss=set()
+    res=0
+    for i in xrange(len(s)):
+        ss.add(s[i])
+        if len(ss)>2:
+            res=max(res, i-start_idx)
+            ss={s[lst_idx],s[i]}
+            start_idx=lst_idx
+            lst_idx=i
+        else:
+            if i>0 and s[i]!=s[i-1]:
+                lst_idx=i
+        if i==len(s)-1: 
+            res=max(res, len(s)-start_idx)
+    return res
+```
+
+lengthOfLongestSubstringTwoDistinct('eceba')
+lengthOfLongestSubstringTwoDistinct('ccaabbb')
+lengthOfLongestSubstringTwoDistinct('ccaabbbc')
