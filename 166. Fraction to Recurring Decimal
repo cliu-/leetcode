@@ -1,0 +1,82 @@
+166. Fraction to Recurring Decimal
+Medium
+
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+Example 1:
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+
+Example 2:
+Input: numerator = 2, denominator = 1
+Output: "2"
+
+Example 3:
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
+
+
+```python
+class Solution(object):
+    def fractionToDecimal(self, numerator, denominator):
+        """
+        :type numerator: int
+        :type denominator: int
+        :rtype: str
+        """
+```
+
+
+```python
+def fractionToDecimal(numerator, denominator):
+    def divide(n1, n2):
+        if n1<n2: return (0,n1)
+        q=n1//n2
+        r=n1-n2*q
+        return (q,r)
+    n1,n2=abs(numerator),abs(denominator)
+    _int,_dec,map,f='','',{},False
+    while n1>0:
+        if n1<n2:
+            f,n1=True,n1*10
+            continue
+        q=n1//n2
+        r=n1-n2*q
+        if not f:
+            _int=str(q)
+        else:
+        n1=r
+```
+
+def fractionToDecimal(numerator, denominator):
+    memo=set()
+    def func(n1,n2,cur=''):
+        if n1==0:
+            return cur
+        if n1 in memo:
+            return '('+cur+')'
+        tmp,n='',n1
+        if n<n2: n=n*10
+        while n<n2: n,tmp=n*10,tmp+'0'
+        q=n//n2
+        r=n-n2*q
+        memo.add(n1)
+        print('{}/{}={},r={},cur={}'.format(n1,n2,q,r,cur+tmp+str(q)))
+        return func(r,n2,cur+tmp+str(q))
+    n1,n2=abs(numerator),abs(denominator)
+    res=''
+    if n1>=n2:
+        q=n1//n2
+        r=n1-n2*q
+        res=res+str(q)
+        n1=r
+    dec=func(n1,n2)
+    return ('0' if not res else res) + (('.'+dec) if dec else '')
+
+
+
+1,6
+4,9
+4,333
