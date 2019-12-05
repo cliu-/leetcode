@@ -1,0 +1,51 @@
+168. Excel Sheet Column Title
+Easy
+
+Given a positive integer, return its corresponding column title as appear in an Excel sheet.
+
+For example:
+
+    1 -> A
+    2 -> B
+    3 -> C
+    ...
+    26 -> Z
+    27 -> AA
+    28 -> AB 
+    ...
+Example 1:
+
+Input: 1
+Output: "A"
+Example 2:
+
+Input: 28
+Output: "AB"
+Example 3:
+
+Input: 701
+Output: "ZY"
+
+
+```python
+class Solution(object):
+    def convertToTitle(self, n):
+        """
+        :type n: int
+        :rtype: str
+        """
+```
+
+Runtime: 20 ms, faster than 36.55% of Python online submissions for Excel Sheet Column Title.
+Memory Usage: 11.9 MB, less than 13.33% of Python online submissions for Excel Sheet Column Title.
+```python
+import string
+def convertToTitle(n):
+    map={i:string.ascii_uppercase[i] for i in range(26)}
+    map[-1],m,res='',n-1,''
+    while m>=0:
+        q,r=divmod(m,26)
+        res=map[r]+res
+        m=q-1
+    return res
+```

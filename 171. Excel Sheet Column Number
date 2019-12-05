@@ -1,0 +1,40 @@
+171. Excel Sheet Column Number
+Easy
+
+Given a column title as appear in an Excel sheet, return its corresponding column number.
+
+For example:
+
+    A -> 1
+    B -> 2
+    C -> 3
+    ...
+    Z -> 26
+    AA -> 27
+    AB -> 28 
+    ...
+Example 1:
+
+Input: "A"
+Output: 1
+Example 2:
+
+Input: "AB"
+Output: 28
+Example 3:
+
+Input: "ZY"
+Output: 701
+
+
+Runtime: 32 ms, faster than 84.53% of Python3 online submissions for Excel Sheet Column Number.
+Memory Usage: 12.7 MB, less than 100.00% of Python3 online submissions for Excel Sheet Column Number.
+```python
+class Solution:
+    def titleToNumber(self, s: str) -> int:
+        res=0
+        for i in range(len(s)-1,-1,-1):
+            e=len(s)-1-i
+            res+=(26**e)*(ord(s[i])-64)
+        return res
+```

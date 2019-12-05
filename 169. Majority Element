@@ -1,0 +1,53 @@
+169. Majority Element
+Easy
+
+Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+
+You may assume that the array is non-empty and the majority element always exist in the array.
+
+Example 1:
+
+Input: [3,2,3]
+Output: 3
+Example 2:
+
+Input: [2,2,1,1,1,2,2]
+Output: 2
+
+
+```python
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+```
+
+
+O(N) time, and O(N) space solution.
+Runtime: 156 ms, faster than 55.64% of Python online submissions for Majority Element.
+Memory Usage: 13.5 MB, less than 24.39% of Python online submissions for Majority Element.
+```python
+from collections import defaultdict
+def majorityElement(nums):
+    map,l=defaultdict(int),len(nums)//2
+    for n in nums:
+        map[n]+=1
+        if map[n]>l:
+            return n
+    return -1
+```
+
+
+Boyer-Moore Voting Algorithm
+This algorithm is cool.
+```python
+def majorityElement(nums):
+    candidate,count=nums[0],1
+    for i in xrange(1,len(nums)):
+        if count==0:
+            candidate = nums[i]
+        count+=(1 if candidate==nums[i] else -1)
+    return candidate
+```
