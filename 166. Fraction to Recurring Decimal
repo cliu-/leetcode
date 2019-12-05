@@ -29,43 +29,28 @@ class Solution(object):
 ```
 
 
+Runtime: 20 ms, faster than 53.70% of Python online submissions for Fraction to Recurring Decimal.
+Memory Usage: 13.1 MB, less than 25.00% of Python online submissions for Fraction to Recurring Decimal.
 ```python
 def fractionToDecimal(numerator, denominator):
-    def divide(n1, n2):
-        if n1<n2: return (0,n1)
-        q=n1//n2
-        r=n1-n2*q
-        return (q,r)
-    n1,n2=abs(numerator),abs(denominator)
-    _int,_dec,map,f='','',{},False
-    while n1>0:
-        if n1<n2:
-            f,n1=True,n1*10
-            continue
-        q=n1//n2
-        r=n1-n2*q
-        if not f:
-            _int=str(q)
-        else:
-        n1=r
-```
-
-def fractionToDecimal(numerator, denominator):
-    memo=set()
+    memo={}
     def func(n1,n2,cur=''):
         if n1==0:
             return cur
         if n1 in memo:
-            return '('+cur+')'
+            a,s=memo[n1][0],memo[n1][1]
+            while a!=n1:
+                s,a=s+memo[a][1],memo[a][0]
+            return cur.replace(s,'')+'('+s+')'
         tmp,n='',n1
         if n<n2: n=n*10
         while n<n2: n,tmp=n*10,tmp+'0'
         q=n//n2
-        r=n-n2*q
-        memo.add(n1)
-        print('{}/{}={},r={},cur={}'.format(n1,n2,q,r,cur+tmp+str(q)))
-        return func(r,n2,cur+tmp+str(q))
-    n1,n2=abs(numerator),abs(denominator)
+        r,tmp=n-n2*q,tmp+str(q)
+        memo[n1]=(r,tmp)
+        # print('{}/{}={},r={},cur={}'.format(n1,n2,q,r,cur+tmp))
+        return func(r,n2,cur+tmp)
+    n1,n2,f=abs(numerator),abs(denominator),True if numerator*denominator<0 else False
     res=''
     if n1>=n2:
         q=n1//n2
@@ -73,9 +58,8 @@ def fractionToDecimal(numerator, denominator):
         res=res+str(q)
         n1=r
     dec=func(n1,n2)
-    return ('0' if not res else res) + (('.'+dec) if dec else '')
-
-
+    return ('-' if f else '')+('0' if not res else res) + (('.'+dec) if dec else '')
+```
 
 1,6
 4,9
