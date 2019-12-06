@@ -29,4 +29,44 @@ def largestNumber(nums: List[int]) -> str:
     return res
 ```
 
+Runtime: 44 ms, faster than 16.65% of Python online submissions for Largest Number.
+Memory Usage: 12 MB, less than 12.50% of Python online submissions for Largest Number.
+
+```python
+def largestNumber(nums: List[int]) -> str:
+    def compare(s1,s2):
+        if s1==s2: return 0
+        if s1+s2>s2+s1: return 1
+        else: return -1
+    def func(arr):
+        if len(arr)<2: return arr
+        m=len(arr)//2
+        a1=func(arr[:m])
+        a2=func(arr[m:])
+        i=len(arr)-1
+        while a1 and a2:
+            if compare(a1[-1],a2[-1])>=0:
+                # print(f'{a1[-1]}>={a2[-1]}')
+                arr[i]=a1.pop() 
+            else: 
+                # print(f'{a1[-1]}<{a2[-1]}')
+                arr[i]=a2.pop()
+            i-=1
+        while a1:
+            arr[i]=a1.pop()
+            i-=1
+        while a2:
+            arr[i]=a2.pop()
+            i-=1
+        return arr
+    arr=func([str(e) for e in nums])
+    # print(f'{arr}')
+    res=''
+    for i in range(len(arr)-1,-1,-1):
+        res=res+arr[i]
+    if res[0]=='0': return '0'
+    return res 
+```
+
+[121,12]
 [3,30,34,5,9]
