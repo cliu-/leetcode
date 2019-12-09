@@ -1,0 +1,43 @@
+186. Reverse Words in a String II
+Medium
+
+Given an input string , reverse the string word by word. 
+
+Example:
+
+Input:  ["t","h","e"," ","s","k","y"," ","i","s"," ","b","l","u","e"]
+Output: ["b","l","u","e"," ","i","s"," ","s","k","y"," ","t","h","e"]
+Note: 
+
+A word is defined as a sequence of non-space characters.
+The input string does not contain leading or trailing spaces.
+The words are always separated by a single space.
+Follow up: Could you do it in-place without allocating extra space?
+
+
+```python
+class Solution:
+    def reverseWords(self, s: List[str]) -> None:
+        """
+        Do not return anything, modify s in-place instead.
+        """
+```
+
+Runtime: 244 ms, faster than 49.16% of Python online submissions for Reverse Words in a String II.
+Memory Usage: 20.8 MB, less than 100.00% of Python online submissions for Reverse Words in a String II.
+```python
+def reverseWords(s: List[str]) -> None:
+    if not s or len(s)==1: return
+    if ' ' not in set(s): return
+    def reverse(s,l,r):
+        while l<r:
+            s[l],s[r]=s[r],s[l]
+            l,r=l+1,r-1
+    reverse(s,0,len(s)-1)
+    p1=p2=0
+    while p2<len(s)+1:
+        if  p2==len(s) or s[p2]==' ':
+            reverse(s,p1,p2-1)
+            p1=p2+1
+        p2=p2+1
+```
