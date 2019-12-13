@@ -1,0 +1,97 @@
+207. Course Schedule
+Medium
+
+There are a total of n courses you have to take, labeled from 0 to n-1.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+
+Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+
+Example 1:
+
+Input: 2, [[1,0]] 
+Output: true
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0. So it is possible.
+Example 2:
+
+Input: 2, [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0, and to take course 0 you should
+             also have finished course 1. So it is impossible.
+Note:
+
+The input prerequisites is a graph represented by a list of edges, not adjacency matrices. Read more about how a graph is represented.
+You may assume that there are no duplicate edges in the input prerequisites.
+
+
+```python
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        graph=defaultdict(list)
+        def build(pres):
+            for 
+```
+
+This problem shows how to examin a graph is DAG(directed acyclic graph).
+
+DFS solution. 
+Runtime: 80 ms, faster than 76.07% of Python online submissions for Course Schedule.
+Memory Usage: 15.2 MB, less than 5.09% of Python online submissions for Course Schedule.
+```python
+from collections import defaultdict
+def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
+    if not prerequisites: return True
+    graph=defaultdict(list)
+    for e in prerequisites:
+        graph[e[0]].append(e[1])
+    visited=set()
+    def func(c, tmp=set()):
+        if c in visited: return True
+        if c in tmp: return False
+        tmp.add(c)
+        for e in graph[c]:
+            if not func(e,visited,tmp):
+                return False
+        tmp.remove(c)
+        visited.add(c)
+        return True
+    for i in range(n):
+        if i in visited:
+            continue
+        if not func(i):
+            return False
+    return True
+```
+
+
+Kahn's algorithm.
+Runtime: 84 ms, faster than 55.93% of Python online submissions for Course Schedule.
+Memory Usage: 13.5 MB, less than 72.88% of Python online submissions for Course Schedule.
+```python
+from collections import defaultdict,deque
+def canFinish(numCourses: int, prerequisites: List[List[int]]) -> bool:
+    if not prerequisites: return True
+    graph,arr=defaultdict(list),[0]*numCourses
+    for i,p in enumerate(prerequisites):
+        graph[p[0]].append(p[1])
+        arr[p[1]]+=1
+    q=deque([i for i in arr if i==0])
+    while q:
+        m,numCourses=q.popleft(),numCourses-1
+        for e in graph[m]:
+            arr[e]-=1
+            if arr[e]==0:
+                q.append(arr[e])
+    return numCourses==0
+```
+
+
+4
+[[1,0],[2,0],[3,1],[3,2]]
+
+4, [[2,0],[1,0],[3,1],[3,2],[1,3]] == False
+
+2
+[[1,0],[0,1]]

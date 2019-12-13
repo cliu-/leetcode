@@ -47,3 +47,28 @@ def isIsomorphic(s: str, t: str) -> bool:
             return False
     return True
 ```
+
+
+Runtime: 32 ms, faster than 57.39% of Python online submissions for Isomorphic Strings.
+Memory Usage: 13.3 MB, less than 47.37% of Python online submissions for Isomorphic Strings.
+```python
+def isIsomorphic(s: str, t: str) -> bool:
+    if s==t: return True
+    map,arr={},[0]*len(s)
+    for i in range(len(s)):
+        if s[i] not in map:
+            map[s[i]]=i
+            arr[i]=i
+        else: 
+            arr[i]=map[s[i]]
+    map={}
+    for i in range(len(t)):
+        if t[i] not in map:
+            map[t[i]]=i
+            if arr[i]!=i:
+                return False
+        else: 
+            if arr[i]!=map[t[i]]:
+                return False
+    return True
+```
