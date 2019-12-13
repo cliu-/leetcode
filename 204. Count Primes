@@ -1,0 +1,58 @@
+204. Count Primes
+Easy
+
+Count the number of prime numbers less than a non-negative number, n.
+
+Example:
+
+Input: 10
+Output: 4
+Explanation: There are 4 prime numbers less than 10, they are 2, 3, 5, 7.
+
+
+```python
+class Solution:
+    def countPrimes(self, n: int) -> int:
+```
+
+Runtime: 2520 ms, faster than 5.06% of Python3 online submissions for Count Primes.
+Memory Usage: 202.2 MB, less than 10.34% of Python3 online submissions for Count Primes.
+```python
+def countPrimes(n: int) -> int:
+    if n<3: return 0
+    ps=set([_ for _ in range(2,n)])
+    p,res=2,0
+    while p<n and ps:
+        print(f'p={p}')
+        res+=1
+        i=1
+        while i*p<n:
+            if i*p in ps: ps.remove(i*p)
+            i+=1
+        print(f'ps={ps}')
+        p=p+1
+        while p<n and ps and p not in ps:
+            p=p+1
+    return res
+```
+
+Optimize a little bit.
+Runtime: 2060 ms, faster than 11.21% of Python online submissions for Count Primes.
+Memory Usage: 113.8 MB, less than 5.55% of Python online submissions for Count Primes.
+```python
+def countPrimes(n: int) -> int:
+    if n<3: return 0
+    ps=set()
+    p,res=2,0
+    while p<n:
+        print(f'p={p}, ps={ps}')
+        res+=1
+        i=1
+        while i*p<n:
+            ps.add(i*p)
+            i+=1
+        p=p+1
+        while p<n and p in ps:
+            p=p+1
+    return res
+```
