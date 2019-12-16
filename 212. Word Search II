@@ -1,0 +1,110 @@
+212. Word Search II
+Hard
+
+Given a 2D board and a list of words from the dictionary, find all words in the board.
+
+Each word must be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+
+ 
+
+Example:
+
+Input: 
+board = [
+  ['o','a','a','n'],
+  ['e','t','a','e'],
+  ['i','h','k','r'],
+  ['i','f','l','v']
+]
+words = ["oath","pea","eat","rain"]
+
+Output: ["eat","oath"]
+ 
+
+Note:
+
+All inputs are consist of lowercase letters a-z.
+The values of words are distinct.
+
+
+```python
+class Solution(object):
+    def findWords(self, board, words):
+        """
+        :type board: List[List[str]]
+        :type words: List[str]
+        :rtype: List[str]
+        """
+
+```
+
+Runtime: 300 ms, faster than 86.46% of Python online submissions for Word Search II.
+Memory Usage: 30 MB, less than 82.61% of Python online submissions for Word Search II.
+```python
+def findWords(board, words):
+    if not words: return []
+    trie={}
+    for w in words:
+        t=trie
+        for c in w:
+            if c not in t:
+                t[c]={}
+            t=t[c]
+        t['#']=w
+    m,n=len(board),len(board[0])
+    res=[]
+    def dfs(x,y,t):
+        if (x<0 or x>=len(board) or y<0 or y>=len(board[0]) or
+            board[x][y]=='#' or
+            board[x][y] not in t):
+            return
+        tmp=board[x][y]
+        n=t[tmp]
+        if '#' in n:
+            res.append(n.pop('#'))
+        board[x][y]='#'
+        dfs(x-1,y,t[tmp])
+        dfs(x+1,y,t[tmp])
+        dfs(x,y-1,t[tmp])
+        dfs(x,y+1,t[tmp])
+        board[x][y]=tmp
+    for x in range(m):
+        for y in range(n):
+            dfs(x,y,trie)
+            if len(res)==len(words):
+                break
+    return res
+```
+
+
+input:
+[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]
+["oath","pea","eat","rain"]
+expected:
+["eat","oath"]
+
+input:
+[['a'],['a']]
+['a']
+expected:
+['a']
+
+input:
+[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]]
+["oath","pea","ate","eat","rain"]
+expected:
+["ate","eat","oath"]
+
+
+input:
+[["b","a","a","b","a","b"],["a","b","a","a","a","a"],["a","b","a","a","a","b"],["a","b","a","b","b","a"],["a","a","b","b","a","b"],["a","a","b","b","b","a"],["a","a","b","a","a","b"]]
+["bbaabaabaaaaabaababaaaaababb","aabbaaabaaabaabaaaaaabbaaaba","babaababbbbbbbaabaababaabaaa","bbbaaabaabbaaababababbbbbaaa","babbabbbbaabbabaaaaaabbbaaab","bbbababbbbbbbababbabbbbbabaa","babababbababaabbbbabbbbabbba","abbbbbbaabaaabaaababaabbabba","aabaabababbbbbbababbbababbaa","aabbbbabbaababaaaabababbaaba","ababaababaaabbabbaabbaabbaba","abaabbbaaaaababbbaaaaabbbaab","aabbabaabaabbabababaaabbbaab","baaabaaaabbabaaabaabababaaaa","aaabbabaaaababbabbaabbaabbaa","aaabaaaaabaabbabaabbbbaabaaa","abbaabbaaaabbaababababbaabbb","baabaababbbbaaaabaaabbababbb","aabaababbaababbaaabaabababab","abbaaabbaabaabaabbbbaabbbbbb","aaababaabbaaabbbaaabbabbabab","bbababbbabbbbabbbbabbbbbabaa","abbbaabbbaaababbbababbababba","bbbbbbbabbbababbabaabababaab","aaaababaabbbbabaaaaabaaaaabb","bbaaabbbbabbaaabbaabbabbaaba","aabaabbbbaabaabbabaabababaaa","abbababbbaababaabbababababbb","aabbbabbaaaababbbbabbababbbb","babbbaabababbbbbbbbbaabbabaa"]
+expected:
+["aabbbbabbaababaaaabababbaaba","abaabbbaaaaababbbaaaaabbbaab","ababaababaaabbabbaabbaabbaba"]
+
+{
+'o': {'a': {'t': {'h': {'#': {}}}}}, 
+'p': {'e': {'a': {'#': {}}}}, 
+'e': {'a': {'t': {'#': {}}}}, 
+'r': {'a': {'i': {'n': {'#': {}}}}}
+}
