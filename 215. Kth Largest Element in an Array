@@ -1,0 +1,51 @@
+215. Kth Largest Element in an Array
+Medium
+
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Example 1:
+
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+Example 2:
+
+Input: [3,2,3,1,2,4,5,5,6] and k = 4
+Output: 4
+Note:
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+```python
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+```
+
+
+Runtime: 104 ms, faster than 24.18% of Python online submissions for Kth Largest Element in an Array.
+Memory Usage: 12.5 MB, less than 33.96% of Python online submissions for Kth Largest Element in an Array.
+```python
+def findKthLargest(nums, k):
+    def bs(arr,l,r,n):
+        while l<=r:
+            m=l+(r-l)//2
+            if arr[m]<n:
+                r=m-1
+            elif arr[m]>n:
+                l=m+1
+            else:
+                return m
+        return l
+    arr=[]
+    for n in nums:
+        if not arr: 
+            i=0
+        else: 
+            i=bs(arr,0,len(arr)-1 if len(arr)<k else k-1,n)
+        arr.insert(i,n)
+    print('arr={}'.format(arr))
+    return arr[k-1] if len(arr)>=k else arr[-1]
+```
