@@ -34,14 +34,24 @@ class Solution(object):
         """
 ```
 
-
+Runtime: 36 ms, faster than 85.90% of Python online submissions for Rectangle Area.
+Memory Usage: 11.7 MB, less than 83.33% of Python online submissions for Rectangle Area.
 ```python
 def computeArea(A, B, C, D, E, F, G, H):
+    total=(C-A)*(D-B)+(G-E)*(H-F)
     if C<=E or G<=A or B>=H or F>=D:
-        return 0
-    if A>=E and B>=F and C<=G and D<=H:
-        return (C-A)*(D-B)
+        return total
+    elif A>=E and B>=F and C<=G and D<=H:
+        return total-(C-A)*(D-B)
     if E>=A and F>=B and G<=C and H<=D:
-        return (G-E)*(H-F)
-    
+        return total-(G-E)*(H-F)
+    if F<=B<D<=H:
+        return total-(min(G,C)-max(A,E))*(D-B)
+    if B<=F<H<=D:
+        return total-(min(G,C)-max(A,E))*(H-F)
+    if A<=E<G<=C:
+        return total-(min(D,H)-max(B,F))*(G-E)
+    if E<=A<C<=G:
+        return total-(min(D,H)-max(B,F))*(C-A)
+    return total-(min(G,C)-max(A,E))*((min(D,H)-max(B,F)))
 ```
