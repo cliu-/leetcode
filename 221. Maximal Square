@@ -1,0 +1,93 @@
+221. Maximal Square
+Medium
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+
+Example:
+
+Input: 
+
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+
+Output: 4
+
+
+```python
+class Solution(object):
+    def maximalSquare(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+```
+
+
+Runtime: 216 ms, faster than 20.64% of Python online submissions for Maximal Square.
+Memory Usage: 17.9 MB, less than 87.50% of Python online submissions for Maximal Square.
+```python
+def maximalSquare(matrix):
+    if not matrix: return 0
+    m,n=len(matrix),len(matrix[0])
+    res=0
+    for i in xrange(m-1,-1,-1):
+        for j in xrange(n-1,-1,-1):
+            if matrix[i][j]=='1':
+                b=1
+                if i+1<m and j+1<n and matrix[i+1][j+1]!='0':
+                    a=int(matrix[i+1][j+1])
+                    k,b1=i+1,1
+                    while k<=i+a and matrix[k][j]!='0': b1,k=b1+1,k+1
+                    k,b2=j+1,1
+                    while k<=j+a and matrix[i][k]!='0': b2,k=b2+1,k+1
+                    b=max(min(b1,b2),b)
+                matrix[i][j]=str(b)
+                if b>res: res=b
+    return res*res
+```
+
+
+Optimize.
+Runtime: 244 ms, faster than 16.08% of Python online submissions for Maximal Square.
+Memory Usage: 17.9 MB, less than 87.50% of Python online submissions for Maximal Square.
+```python
+def maximalSquare(matrix):
+    if not matrix: return 0
+    m,n=len(matrix),len(matrix[0])
+    res=0
+    for i in xrange(m-1,-1,-1):
+        for j in xrange(n-1,-1,-1):
+            if matrix[i][j]=='1':
+                a=b=c=0
+                if i+1<m and matrix[i+1][j]!='0': 
+                    a=int(matrix[i+1][j])
+                if j+1<n and matrix[i][j+1]!='0':
+                    b=int(matrix[i][j+1])
+                if i+1<m and j+1<n and matrix[i+1][j+1]!='0':
+                    c=int(matrix[i+1][j+1])
+                a=min(a,b,c)+1
+                matrix[i][j]=str(a)
+                if a>res: res=a
+    return res*res
+```
+
+
+[["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+4
+
+[["1"]]
+1
+
+[["1","0"]]
+1
+
+
+[["1","1","1","1","1","1","1","1"],["1","1","1","1","1","1","1","0"],["1","1","1","1","1","1","1","0"],["1","1","1","1","1","0","0","0"],["0","1","1","1","1","0","0","0"]]
+[["1","1","1","1","1","1","1","1"],
+["1","1","1","1","1","1","1","0"],
+["1","1","1","1","1","1","1","0"],
+["1","1","1","1","1","0","0","0"],
+["0","1","1","1","1","0","0","0"]]
+16
