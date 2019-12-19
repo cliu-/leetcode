@@ -1,0 +1,66 @@
+234. Palindrome Linked List
+Easy
+
+Given a singly linked list, determine if it is a palindrome.
+
+Example 1:
+
+Input: 1->2
+Output: false
+Example 2:
+
+Input: 1->2->2->1
+Output: true
+Follow up:
+Could you do it in O(n) time and O(1) space?
+
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def isPalindrome(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+```
+
+
+Runtime: 56 ms, faster than 98.77% of Python online submissions for Palindrome Linked List.
+Memory Usage: 30.8 MB, less than 68.97% of Python online submissions for Palindrome Linked List.
+```python
+def isPalindrome(head):
+    def toarr(node):
+        ans=[]
+        while node:
+            ans.append(node.val)
+            node=node.next
+        return ans
+    if not head or not head.next: return True
+    def reverse(head):
+        dummy,p=ListNode(0),head
+        while p:
+            n,p1=dummy.next,p.next
+            dummy.next,p.next=p,n
+            p=p1
+            # print('dummy={}'.format(toarr(dummy)))
+        return dummy.next
+    dummy=ListNode(0)
+    dummy.next,p1,p2=head,dummy,dummy
+    while p2 and p2.next:
+        p1=p1.next
+        p2=p2.next.next
+    # print('p1={},p2={}'.format(p1.val,p2.val if p2 else 'None'))
+    rp,p=reverse(p1.next),head
+    while rp:
+        # print("p={},rp={}".format(p.val,rp.val))
+        if p.val!=rp.val:
+            return False
+        p,rp=p.next,rp.next
+    return True
+```
