@@ -1,0 +1,55 @@
+226. Invert Binary Tree
+Easy
+
+Invert a binary tree.
+
+Example:
+
+Input:
+
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+
+Output:
+
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+
+Trivia:
+This problem was inspired by this original tweet by Max Howell:
+
+Google: 90% of our engineers use the software you wrote (Homebrew), but you can’t invert a binary tree on a whiteboard so f*** off.
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+          
+```
+
+
+Runtime: 16 ms, faster than 74.10% of Python online submissions for Invert Binary Tree.
+Memory Usage: 11.9 MB, less than 25.00% of Python online submissions for Invert Binary Tree.
+```python
+def invertTree(root: TreeNode) -> TreeNode:
+    def func(node):
+        if not node: return
+        node.left,node.right=node.right,node.left
+        func(node.left)
+        func(node.right)
+    func(root)
+    return root
+```

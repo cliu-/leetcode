@@ -1,0 +1,60 @@
+229. Majority Element II
+Medium
+
+Given an integer array of size n, find all elements that appear more than `⌊ n/3 ⌋` times.
+
+Note: The algorithm should run in linear time and in O(1) space.
+
+Example 1:
+
+Input: [3,2,3]
+Output: [3]
+
+
+Example 2:
+
+Input: [1,1,1,3,3,2,2,2]
+Output: [1,2]
+
+
+```python
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+```
+
+
+Runtime: 104 ms, faster than 63.36% of Python online submissions for Majority Element II.
+Memory Usage: 12.9 MB, less than 38.46% of Python online submissions for Majority Element II.
+```python
+def majorityElement(nums):
+    if not nums: return []
+    if len(nums)==1: return nums
+    c1,v1,c2,v2=0,None,0,None
+    for n in nums:
+        if n==v1: c1+=1
+        elif n==v2: c2+=1
+        elif v1==None: v1,c1=n,c1+1
+        elif v2==None: v2,c2=n,c2+1
+        else:
+            c1,c2=c1-1,c2-1
+            if c1==0: v1=None
+            if c2==0: v2=None
+    res,c1,c2=[],0,0
+    for n in nums:
+        if n==v1: c1+=1
+        if n==v2: c2+=1
+    if c1>len(nums)//3: res.append(v1)
+    if c2>len(nums)//3: res.append(v2)
+    return res
+```
+
+
+[1,3,6,1,2,2,1,2]
+
+[2,2]
+
+[1,2,3,4]

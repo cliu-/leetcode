@@ -1,0 +1,72 @@
+230. Kth Smallest Element in a BST
+Medium
+
+Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
+
+Note:
+You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+
+Example 1:
+
+Input: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+Output: 1
+
+Example 2:
+
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Output: 3
+
+Follow up:
+What if the BST is modified (insert/delete operations) often and you need to find the kth smallest frequently? How would you optimize the kthSmallest routine?
+
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def kthSmallest(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: int
+        """
+```
+
+
+Runtime: 40 ms, faster than 79.76% of Python online submissions for Kth Smallest Element in a BST.
+Memory Usage: 19.6 MB, less than 47.83% of Python online submissions for Kth Smallest Element in a BST.
+```python
+def kthSmallest(root, k):
+    ks=[k]
+    def func(node):
+        if not node:
+            return (False, -1)
+        r,v=func(node.left)
+        if r: return (True,v)
+        ks[0]-=1
+        if ks[0]==0: 
+            return (True,node.val)
+        r,v=func(node.right)
+        if r: return (True,v)
+        return (False, -1)
+    r,v=func(root)
+    return v
+```
