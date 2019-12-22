@@ -1,0 +1,74 @@
+240. Search a 2D Matrix II
+Medium
+
+Write an efficient algorithm that searches for a value in an `m x n` matrix. This matrix has the following properties:
+
+Integers in each row are sorted in ascending from left to right.
+Integers in each column are sorted in ascending from top to bottom.
+Example:
+
+Consider the following matrix:
+
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+Given target = 5, return true.
+
+Given target = 20, return false.
+
+
+```python
+class Solution(object):
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+```
+
+
+Divide and Conquer solution, runtime O(nlgn), space O(lgn).
+Runtime: 108 ms, faster than 29.92% of Python online submissions for Search a 2D Matrix II.
+Memory Usage: 15.8 MB, less than 20.00% of Python online submissions for Search a 2D Matrix II.
+```python
+def searchMatrix(matrix, target):
+    if not matrix: return False
+    m,n=len(matrix),len(matrix[0])
+    def func(x1,y1,x2,y2,t):
+        if x1>x2 or y1>y2: return False
+        print('x1={},y1={},x2={},y2={}'.format(x1,y1,x2,y2))
+        if x1==x2 and y1==y2:
+            return matrix[x1][y1]==t
+        if t<matrix[x1][y1] or t>matrix[x2][y2]:
+            return False
+        x,y=(x1+x2)//2,(y1+y2)//2
+        if t>matrix[x][y]:
+            return func(x1,y+1,x2,y2,t) or func(x+1,y1,x2,y,t)
+        elif t<matrix[x][y]:
+            return func(x1,y1,x2,y-1,t) or func(x1,y,x-1,y2,t)
+        else:
+            return True
+    return func(0,0,m-1,n-1,target)
+```
+
+Search Space Reduction approach.
+Runtime: 48 ms, faster than 74.03% of Python online submissions for Search a 2D Matrix II.
+Memory Usage: 15.8 MB, less than 30.00% of Python online submissions for Search a 2D Matrix II.
+```python
+def searchMatrix(matrix, target):
+    if not matrix or not matrix: return False
+    x,y=len(matrix)-1,0
+    while matrix[x][y]!=target:
+        if target>matrix[x][y]:
+            y+=1
+        else:
+            x-=1
+        if x<0 or y>=len(matrix[0]):
+            return False
+    return True
+```

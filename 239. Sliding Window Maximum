@@ -40,25 +40,78 @@ class Solution(object):
         """
 ```
 
-
+Use heap to solve the problem.
+Tip: `heapq` in python could just do the `"ascent sorting"`, if we want to make a `heap` pop by descent, we can use the complement of the integers in original array for `heapq.push`.
+Runtime: 172 ms, faster than 33.90% of Python online submissions for Sliding Window Maximum.
+Memory Usage: 22.9 MB, less than 6.90% of Python online submissions for Sliding Window Maximum.
 ```python
 def maxSlidingWindow(nums, k):
     from collections import deque
     import heapq
+    if not nums: return []
     if k==1: return nums
-    if k==len(nums): return max(nums)
+    if k==len(nums): return [max(nums)]
     i,h,q=0,[],deque()
     ans=[]
     while i<len(nums):
-        e=[nums[i],i]
+        e=[-nums[i],i]
         if len(q)>=k:
-            while h and h[-1][1]==-1: heapq.heappop(h)
-            ans.append(h[-1][0])
+            while h[0][1]==-1:
+                heapq.heappop(h)
+            ans.append(-h[0][0])
             q.popleft()[1]=-1
         heapq.heappush(h,e)
         q.append(e)
+        # print('i={},nums[i]={},q={},h={}'.format(i,nums[i],q,h))
         i+=1
-    while h and h[-1][1]==-1: heapq.heappop(h)
-    ans.append(h[-1][0])
+    while h[0][1]==-1:
+        heapq.heappop(h)
+    ans.append(-h[0][0])
     return ans
+```
+
+
+`deque` solution.
+Runtime: 144 ms, faster than 62.85% of Python online submissions for Sliding Window Maximum.
+Memory Usage: 18.8 MB, less than 79.31% of Python online submissions for Sliding Window Maximum.
+```python
+def maxSlidingWindow(nums, k):
+    from collections import deque
+    if not nums: return []
+    if k==1: return nums
+    if k==len(nums): return [max(nums)]
+    q,ans=deque(),[]
+    for i,n in enumerate(nums):
+        if q and q[0]<=i-k:
+            q.popleft()
+        while q and nums[q[-1]]<n:
+            q.pop()
+        q.append(i)
+        if i>=k-1:
+            ans.append(nums[q[0]])
+    return ans
+```
+
+DP solution
+Runtime: 148 ms, faster than 52.79% of Python online submissions for Sliding Window Maximum.
+Memory Usage: 18.8 MB, less than 62.07% of Python online submissions for Sliding Window Maximum.
+```python
+def maxSlidingWindow(nums, k):
+    if not nums: return []
+    if k==1: return nums
+    if k==len(nums): return [max(nums)]
+    left,right,m=[0]*len(nums),[0]*len(nums),-2**31
+    for i in xrange(len(nums)):
+        if i%k==0: m=-2**32
+        m=max(nums[i],m)
+        left[i]=m
+    m=-2**31
+    for i in xrange(len(nums)-1,-1,-1):
+        m=max(nums[i],m)
+        right[i]=m
+        if i%k==0: m=-2**32
+    res=[]
+    for i in xrange(k-1,len(nums)):
+        res.append(max(left[i],right[i+1-k]))
+    return res
 ```

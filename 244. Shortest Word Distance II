@@ -1,0 +1,62 @@
+244. Shortest Word Distance II
+Medium
+
+Design a class which receives a list of words in the constructor, and implements a method that takes two words word1 and word2 and return the shortest distance between these two words in the list. Your method will be called repeatedly many times with different parameters. 
+
+Example:
+Assume that words = ["practice", "makes", "perfect", "coding", "makes"].
+
+Input: word1 = “coding”, word2 = “practice”
+Output: 3
+Input: word1 = "makes", word2 = "coding"
+Output: 1
+Note:
+You may assume that word1 does not equal to word2, and word1 and word2 are both in the list.
+
+
+
+Runtime: 88 ms, faster than 29.21% of Python online submissions for Shortest Word Distance II.
+Memory Usage: 21.5 MB, less than 28.57% of Python online submissions for Shortest Word Distance II.
+```python
+from collections import defaultdict
+class WordDistance(object):
+    
+    def __init__(self, words):
+        """
+        :type words: List[str]
+        """
+        self.map,self.memo=defaultdict(list),defaultdict(int)
+        for i in xrange(len(words)):
+            self.map[words[i]].append(i)
+        
+
+    def shortest(self, word1, word2):
+        """
+        :type word1: str
+        :type word2: str
+        :rtype: int
+        """
+        t1=word1+'#'+word2
+        if t1 in self.memo: return self.memo[t1]
+        t2=word2+'#'+word1
+        if t2 in self.memo: return self.memo[t2]
+        a1,a2=self.map[word1],self.map[word2]
+        ans,i1,i2=2**31,0,0
+        while i1<len(a1) and i2<len(a2):
+            while i1<len(a1) and a1[i1]<a2[i2]:
+                if a2[i2]-a1[i1]<ans: ans=a2[i2]-a1[i1]
+                i1+=1
+            if i1==len(a1): break
+            while i2<len(a2) and a2[i2]<a1[i1]:
+                if a1[i1]-a2[i2]<ans: ans=a1[i1]-a2[i2]
+                i2+=1
+            if i2==len(a2): break
+        self.memo[t1]=self.memo[t2]=ans
+        return ans
+        
+
+
+# Your WordDistance object will be instantiated and called as such:
+# obj = WordDistance(words)
+# param_1 = obj.shortest(word1,word2)
+```

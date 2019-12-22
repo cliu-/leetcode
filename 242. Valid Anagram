@@ -1,0 +1,47 @@
+242. Valid Anagram
+Easy
+
+Given two strings s and t , write a function to determine if t is an anagram of s.
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+Output: true
+Example 2:
+
+Input: s = "rat", t = "car"
+Output: false
+Note:
+You may assume the string contains only lowercase alphabets.
+
+Follow up:
+What if the inputs contain unicode characters? How would you adapt your solution to such case?
+
+
+```python
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+```
+
+
+Runtime: 36 ms, faster than 84.50% of Python online submissions for Valid Anagram.
+Memory Usage: 12.5 MB, less than 100.00% of Python online submissions for Valid Anagram.
+```python
+def isAnagram(s, t):
+    if s==t: return True
+    if len(s)!=len(t): return False
+    map={}
+    for c in s:
+        if c not in map: map[c]=0
+        map[c]+=1
+    for c in t:
+        if c not in map: return False
+        map[c]-=1
+        if map[c]==0: map.pop(c)
+    return not map
+```
