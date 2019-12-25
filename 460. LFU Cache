@@ -1,0 +1,152 @@
+460. LFU Cache
+Hard
+
+Design and implement a data structure for Least Frequently Used (LFU) cache. It should support the following operations: get and put.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item. For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least recently used key would be evicted.
+
+Note that the number of times an item is used is the number of calls to the get and put functions for that item since it was inserted. This number is set to zero when the item is removed.
+
+ 
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+ 
+
+Example:
+
+LFUCache cache = new LFUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.get(3);       // returns 3.
+cache.put(4, 4);    // evicts key 1.
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+
+
+
+Runtime: 280 ms, faster than 35.95% of Python online submissions for LFU Cache.
+Memory Usage: 22.1 MB, less than 100.00% of Python online submissions for LFU Cache.
+```python
+from collections import OrderedDict
+class Element(object):
+    
+    def __init__(self,k,v):
+        self.k,self.v=k,v
+        self.f=1
+        self.pre=self.next=None
+        
+    def __str__(self):
+        return '({}={})'.format(self.k,self.v)
+    
+    
+class LFUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.cap=capacity
+        self.vmap,self.fmap={},OrderedDict()
+        
+        
+    def remove(self, e):
+        # print('removing e={} from fmap'.format(e))
+        arr=self.fmap[e.f]
+        if e==arr[0]==arr[1]: 
+            self.fmap[e.f]=[]
+        elif e==arr[0]:
+            h,arr[0]=arr[0],arr[0].next
+            h.next=arr[0].pre=None
+        elif e==arr[1]:
+            t,arr[1]=arr[1],arr[1].pre
+            t.pre=arr[1].next=None
+        else:
+            if e.pre: e.pre.next=e.next
+            if e.next: e.next.pre=e.pre
+        e.pre=e.next=None
+    
+    
+    def insert(self, e):
+        # print('inserting e={} to fmap'.format(e))
+        if e.f not in self.fmap or not self.fmap[e.f]:
+            self.fmap[e.f]=[e,e]
+        else:
+            h,t=self.fmap[e.f][0],self.fmap[e.f][1]
+            t.next,e.pre=e,t
+            self.fmap[e.f][1]=e
+
+            
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        if key not in self.vmap or self.cap==0:
+            return -1
+        e=self.vmap[key]
+        self.remove(e)
+        e.f=e.f+1
+        self.insert(e)
+        # print('after getting {}, vmap={}, fmap={}'.format(key,self.vmap,self.fmap))
+        return e.v
+        
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        if self.cap==0: return
+        # print('putting {}={}, vmap={}, fmap={}'.format(key,value,self.vmap,self.fmap))
+        if key in self.vmap:
+            e=self.vmap[key]
+            self.remove(e)
+            e.v,e.f=value,e.f+1
+            self.insert(e)
+        else:
+            if len(self.vmap)>=self.cap:
+                e=None
+                for v in self.fmap.values():
+                    if v: e=v[0]; break
+                self.remove(e)
+                self.vmap.pop(e.k)
+            e=Element(key,value)
+            self.insert(e)
+            self.vmap[key]=e
+        # print('after putting {}={}, vmap={}, fmap={}'.format(key,value,self.vmap,self.fmap))
+
+
+# Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+```
+
+
+
+
+
+
+["LFUCache","put","put","get","get","get","put","put","get","get","get","get"]
+[[3],[2,2],[1,1],[2],[1],[2],[3,3],[4,4],[3],[2],[1],[4]]
+[null,null,null,2,1,2,null,null,-1,2,1,4]
+
+
+
+["LFUCache","put","put","get","put","get","get","put","get","get","get"]
+[[2],[1,1],[2,2],[1],[3,3],[2],[3],[4,4],[1],[3],[4]]
+[null,null,null,1,null,-1,3,null,-1,3,4]
+
+
+["LFUCache","put","get"]
+[[0],[0,0],[0]]
+

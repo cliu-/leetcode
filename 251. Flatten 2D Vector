@@ -1,0 +1,87 @@
+251. Flatten 2D Vector
+Medium
+
+Design and implement an iterator to flatten a 2d vector. It should support the following operations: next and hasNext.
+
+ 
+
+Example:
+
+Vector2D iterator = new Vector2D([[1,2],[3],[4]]);
+
+iterator.next(); // return 1
+iterator.next(); // return 2
+iterator.next(); // return 3
+iterator.hasNext(); // return true
+iterator.hasNext(); // return true
+iterator.next(); // return 4
+iterator.hasNext(); // return false
+ 
+
+Notes:
+
+Please remember to RESET your class variables declared in Vector2D, as static/class variables are persisted across multiple test cases. Please see here for more details.
+You may assume that next() call will always be valid, that is, there will be at least a next element in the 2d vector when next() is called.
+ 
+
+Follow up:
+
+As an added challenge, try to code it using only iterators in C++ or iterators in Java.
+
+
+
+Runtime: 64 ms, faster than 99.82% of Python online submissions for Flatten 2D Vector.
+Memory Usage: 18.6 MB, less than 100.00% of Python online submissions for Flatten 2D Vector.
+```python
+class Vector2D(object):
+
+    def __init__(self, v):
+        """
+        :type v: List[List[int]]
+        """
+        self.v,self.flat,self.i=v,[],0
+        self.func(self.v, self.flat)
+
+    
+    def func(self,arr,res=[]):
+        if not arr: return
+        for e in arr:
+            if e==None or type(e)==list:
+                self.func(e,res)
+            else:
+                res.append(e)
+
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        i+=1
+        return self.flat[i-1]
+        
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        return self.i<len(self.flat)
+        
+
+
+# Your Vector2D object will be instantiated and called as such:
+# obj = Vector2D(v)
+# param_1 = obj.next()
+# param_2 = obj.hasNext()
+```
+
+
+["Vector2D","next","next","next","hasNext","hasNext","next","hasNext"]
+[[[[1,2],[3],[4]]],[null],[null],[null],[null],[null],[null],[null]]
+
+
+["Vector2D","hasNext"]
+[[[[]]],[null]]
+
+
+["Vector2D","hasNext","next","hasNext"]
+[[[[],[3]]],[null],[null],[null]]
