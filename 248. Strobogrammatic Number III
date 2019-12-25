@@ -22,7 +22,6 @@ class Solution(object):
         :type high: str
         :rtype: int
         """
-
 ```
 
 
@@ -109,3 +108,6 @@ def strobogrammaticInRange(low, high):
 "0"
 "0"
 1
+
+
+low='9234',hight='1234567'

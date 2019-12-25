@@ -1,0 +1,91 @@
+247. Strobogrammatic Number II
+Medium
+
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Find all strobogrammatic numbers that are of length = n.
+
+Example:
+
+Input:  n = 2
+Output: ["11","69","88","96"]
+
+
+```python
+class Solution(object):
+    def findStrobogrammatic(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+
+```
+
+
+Runtime: 140 ms, faster than 20.75% of Python online submissions for Strobogrammatic Number II.
+Memory Usage: 18.7 MB, less than 100.00% of Python online submissions for Strobogrammatic Number II.
+```python
+def findStrobogrammatic(n):
+    m,f=n//2,[n%2==0]
+    arr,map=['0','1','6','8','9'],{'0':'0','1':'1','6':'9','8':'8','9':'6'}
+    res=[]
+    def func(m, cur=[]):
+        if len(cur)==m:
+            pos=[map[_] for _ in cur[::-1]]
+            print('cur={},pos={},f={}'.format(cur,pos,f[0]))
+            t1,t2=''.join(cur),''.join(pos)
+            if f[0]: 
+                res.append(t1+t2)
+            else:
+                for c in ['0','1','8']:
+                    res.append(t1+c+t2)
+            return 
+        for e in arr:
+            if not cur and e=='0': continue
+            cur.append(e)
+            func(m,cur)
+            cur.pop()
+    func(m)
+    return res
+```
+
+
+Some observation to the sequence:
+
+n == 1: [0, 1, 8]
+
+n == 2: [11, 88, 69, 96]
+
+How about n == 3?
+=> it can be retrieved if you insert [0, 1, 8] to the middle of solution of n == 2
+
+n == 4?
+=> it can be retrieved if you insert [11, 88, 69, 96, 00] to the middle of solution of n == 2
+
+n == 5?
+=> it can be retrieved if you insert [0, 1, 8] to the middle of solution of n == 4
+
+the same, for n == 6, it can be retrieved if you insert [11, 88, 69, 96, 00] to the middle of solution of n == 4
+
+
+Runtime: 104 ms, faster than 67.53% of Python online submissions for Strobogrammatic Number II.
+Memory Usage: 17.5 MB, less than 100.00% of Python online submissions for Strobogrammatic Number II.
+```python
+def findStrobogrammatic(n):
+    arr1=['00','11','69','88','96']
+    arr2=['0','1','8']
+    def func(n):
+        if n==0: return []
+        if n==1: return arr2
+        if n==2: return ['11','69','88','96']
+        if n%2==0: tmp,ins=func(n-2),arr1
+        else: tmp,ins=func(n-1),arr2
+        res=[]
+        for e in ins:
+            for t in tmp:
+                l=len(t)//2
+                res.append(t[:l]+e+t[l:])
+        return res
+    return func(n)
+
+```
