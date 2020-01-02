@@ -1,0 +1,50 @@
+249. Group Shifted Strings
+Medium
+
+Given a string, we can "shift" each of its letter to its successive letter, for example: "abc" -> "bcd". We can keep "shifting" which forms the sequence:
+
+"abc" -> "bcd" -> ... -> "xyz"
+Given a list of strings which contains only lowercase alphabets, group all strings that belong to the same shifting sequence.
+
+Example:
+
+Input: ["abc", "bcd", "acef", "xyz", "az", "ba", "a", "z"],
+Output: 
+[
+  ["abc","bcd","xyz"],
+  ["az","ba"],
+  ["acef"],
+  ["a","z"]
+]
+
+
+```python
+class Solution(object):
+    def groupStrings(self, strings):
+        """
+        :type strings: List[str]
+        :rtype: List[List[str]]
+        """
+```
+
+
+Runtime: 24 ms, faster than 69.21% of Python online submissions for Group Shifted Strings.
+Memory Usage: 12 MB, less than 16.67% of Python online submissions for Group Shifted Strings.
+```python
+from collections import defaultdict
+def groupStrings(strings):
+    if not strings: return []
+    if len(strings)==1: return [[strings[0]]]
+    map=defaultdict(list)
+    for s in strings:
+        if len(s)==1: 
+            map['0'].append(s)
+        else:
+            g=''
+            for i in xrange(1,len(s)):
+                t=ord(s[i])-ord(s[i-1])
+                if t<0: t+=26
+                g+=str(t)
+            map[g].append(s)
+    return [v for v in map.values()]
+```

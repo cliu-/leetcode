@@ -1,0 +1,61 @@
+250. Count Univalue Subtrees
+Medium
+
+389
+
+91
+
+Add to List
+
+Share
+Given a binary tree, count the number of uni-value subtrees.
+
+A Uni-value subtree means all nodes of the subtree have the same value.
+
+Example :
+
+Input:  root = [5,1,5,5,5,null,5]
+
+              5
+             / \
+            1   5
+           / \   \
+          5   5   5
+
+Output: 4
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def countUnivalSubtrees(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+```
+
+
+Runtime: 28 ms, faster than 27.83% of Python online submissions for Count Univalue Subtrees.
+Memory Usage: 12.1 MB, less than 21.43% of Python online submissions for Count Univalue Subtrees.
+```python
+def countUnivalSubtrees(root):
+    ans=[0]
+    def func(node):
+        if not node: return ''
+        l=func(node.left)
+        r=func(node.right)
+        m=str(node.val)
+        if l==r=='' or l==r==m or l+r==m:
+            ans[0]+=1
+            return m
+        else:
+            return l+r+m
+    return ans[0]
+```
