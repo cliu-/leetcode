@@ -1,0 +1,60 @@
+253. Meeting Rooms II
+Medium
+
+Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei), find the minimum number of conference rooms required.
+
+Example 1:
+
+Input: [[0, 30],[5, 10],[15, 20]]
+Output: 2
+Example 2:
+
+Input: [[7,10],[2,4]]
+Output: 1
+NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.
+
+
+```python
+class Solution(object):
+    def minMeetingRooms(self, intervals):
+        """
+        :type intervals: List[List[int]]
+        :rtype: int
+        """
+
+```
+
+Runtime: 72 ms, faster than 23.71% of Python online submissions for Meeting Rooms II.
+Memory Usage: 16.2 MB, less than 7.14% of Python online submissions for Meeting Rooms II.
+```python
+def minMeetingRooms(intervals):
+    arr=[]
+    for e in intervals:
+        arr.append((e[0],True))
+        arr.append((e[1],False))
+    arr=sorted(arr)
+    ans=t=0
+    for e in arr:
+        if t>ans: ans=t
+        if e[1]: t+=1
+        else: t-=1
+    return ans
+```
+
+
+[[4,18],[1,35],[12,45],[25,46],[22,27]]
+4
+
+[[4,18],[1,35],[12,45],[12,18],[13,18],[15,22],[15,22],[16,27],[25,46],[22,27]]
+
+[]
+0
+
+[[4,18]]
+1
+
+[[7,10],[2,4]]
+1
+
+[[5,8],[6,8]]
+2
