@@ -1,0 +1,60 @@
+257. Binary Tree Paths
+Easy
+
+Given a binary tree, return all root-to-leaf paths.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Input:
+
+   1
+ /   \
+2     3
+ \
+  5
+
+Output: ["1->2->5", "1->3"]
+
+Explanation: All root-to-leaf paths are: 1->2->5, 1->3
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def binaryTreePaths(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[str]
+        """
+```
+
+
+Runtime: 24 ms, faster than 33.99% of Python online submissions for Binary Tree Paths.
+Memory Usage: 11.9 MB, less than 31.58% of Python online submissions for Binary Tree Paths.
+```python
+def binaryTreePaths(root):
+    ans=[]
+    def func(n,cur=[]):
+        if not n:
+            return
+        cur.append(str(n.val))
+        if not n.left and not n.right:
+            ans.append('->'.join(cur))
+        else:
+            if n.left: 
+                func(n.left, cur)
+                cur.pop()
+            if n.right:
+                func(n.right, cur)
+                cur.pop()
+    func(root)
+    return ans
+```
