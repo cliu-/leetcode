@@ -1,0 +1,44 @@
+258. Add Digits
+Easy
+
+Given a non-negative integer num, repeatedly add all its digits until the result has only one digit.
+
+Example:
+
+Input: 38
+Output: 2 
+Explanation: The process is like: 3 + 8 = 11, 1 + 1 = 2. 
+             Since 2 has only one digit, return it.
+Follow up:
+Could you do it without any loop/recursion in O(1) runtime?
+
+
+```python
+class Solution(object):
+    def addDigits(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+```
+
+
+Runtime: 20 ms, faster than 62.68% of Python online submissions for Add Digits.
+Memory Usage: 11.9 MB, less than 25.00% of Python online submissions for Add Digits.
+```python
+def addDigits(num):
+    while num>=10:
+        n,t=num,0
+        while n>0:
+            t,n=t+n%10,n//10
+        num=t
+    return num
+```
+
+
+https://en.wikipedia.org/wiki/Digital_root
+```python
+def addDigits(num):
+    if num == 0 : return 0
+    else:return (num - 1) % 9 + 1
+```
