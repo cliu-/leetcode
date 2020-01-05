@@ -25,3 +25,27 @@ class Solution(object):
         :rtype: bool
         """
 ```
+
+Runtime: 80 ms, faster than 51.34% of Python online submissions for Graph Valid Tree.
+Memory Usage: 13.2 MB, less than 75.00% of Python online submissions for Graph Valid Tree.
+```python
+def validTree(n, edges):
+    m=[[] for _ in xrange(n)]
+    for e in edges:
+        m[e[0]].append(e[1])
+        m[e[1]].append(e[0])
+    print(m)
+    q,visited=deque([0]),set()
+    while q:
+        v,f=q.popleft(),False
+        visited.add(v)
+        print('v={},m[v]={}'.format(v,m[v]))
+        for c in m[v]:
+            if c in visited:
+                if f: return False
+                f=True
+                continue
+            q.append(c)
+    print(visited)
+    return len(visited)==n
+```

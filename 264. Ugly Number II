@@ -1,0 +1,62 @@
+264. Ugly Number II
+Medium
+
+Write a program to find the n-th ugly number.
+
+Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. 
+
+Example:
+
+Input: n = 10
+Output: 12
+Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly numbers.
+
+Note:  
+
+- 1 is typically treated as an ugly number.
+- n does not exceed 1690.
+
+
+```python
+class Solution(object):
+    def nthUglyNumber(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+```
+
+Runtime complexity: O(NlogN)
+Runtime: 440 ms, faster than 15.48% of Python online submissions for Ugly Number II.
+Memory Usage: 12.1 MB, less than 11.11% of Python online submissions for Ugly Number II.
+```python
+from heapq import heappush, heappop
+def nthUglyNumber(n):
+    h,a,s=[1],[],{1, }
+    while len(a)<n:
+        x=heappop(h)
+        a.append(x)
+        for y in [2,3,5]:
+            if x*y not in s:
+                heappush(h,x*y)
+                s.add(x*y)
+    return a[-1]
+```
+
+DP solution. O(N)
+Runtime: 124 ms, faster than 64.76% of Python online submissions for Ugly Number II.
+Memory Usage: 11.8 MB, less than 66.67% of Python online submissions for Ugly Number II.
+```python
+def nthUglyNumber(n):
+    p2=p3=p5=0
+    dp=[1]
+    while len(dp)<n:
+        m=min(dp[p2]*2,dp[p3]*3,dp[p5]*5)
+        dp.append(m)
+        if m==dp[p2]*2: p2+=1
+        if m==dp[p3]*3: p3+=1
+        if m==dp[p5]*5: p5+=1
+    return dp[-1]
+```
+
+
