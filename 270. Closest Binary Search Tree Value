@@ -1,0 +1,82 @@
+270. Closest Binary Search Tree Value
+Easy
+
+Given a non-empty binary search tree and a target value, find the value in the BST that is closest to the target.
+
+Note:
+
+Given target value is a floating point.
+You are guaranteed to have only one unique value in the BST that is closest to the target.
+Example:
+
+Input: root = [4,2,5,1,3], target = 3.714286
+
+    4
+   / \
+  2   5
+ / \
+1   3
+
+Output: 4
+
+
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def closestValue(self, root, target):
+        """
+        :type root: TreeNode
+        :type target: float
+        :rtype: int
+        """
+
+```
+
+Runtime: 36 ms, faster than 19.25% of Python online submissions for Closest Binary Search Tree Value.
+Memory Usage: 15.9 MB, less than 44.44% of Python online submissions for Closest Binary Search Tree Value.
+```python
+def closestValue(root, target):
+    v=[]
+    def func(node,t):
+        if not node: return
+        if node.left:
+            func(node.left, t)
+        if not v or abs(t-node.val)<abs(t-v[0]):
+            v[0]=node.val
+        if node.right:
+            func(node.right, t)
+    func(root,target)
+    return v[0]
+```
+
+
+Runtime: 28 ms, faster than 73.54% of Python online submissions for Closest Binary Search Tree Value.
+Memory Usage: 16 MB, less than 11.11% of Python online submissions for Closest Binary Search Tree Value.
+```python
+def closestValue(root, target):
+    s,p,v=[],root,''
+    while s or p:
+        while p:
+            s.append(p)
+            p=p.left
+        p=s.pop()
+        if v!='' and abs(target-p.val)>abs(target-v):
+            return v
+        v=p.val
+        p=p.right
+    return v
+```
+
+
+[41,37,44,24,39,42,48,1,35,38,40,null,43,46,49,0,2,30,36,null,null,null,null,null,null,45,47,null,null,null,null,null,4,29,32,null,null,null,null,null,null,3,9,26,null,31,34,null,null,7,11,25,27,null,null,33,null,6,8,10,16,null,null,null,28,null,null,5,null,null,null,null,null,15,19,null,null,null,null,12,null,18,20,null,13,17,null,null,22,null,14,null,null,21,23]
+3.285714
+
+[0]
+2147483648.0

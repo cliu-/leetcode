@@ -1,0 +1,82 @@
+268. Missing Number
+Easy
+
+Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+
+Example 1:
+
+Input: [3,0,1]
+Output: 2
+
+Example 2:
+
+Input: [9,6,4,2,3,5,7,0,1]
+Output: 8
+
+Note:
+Your algorithm should run in linear runtime complexity. Could you implement it using only constant extra space complexity?
+
+```python
+class Solution(object):
+    def missingNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+
+```
+
+
+Runtime: 136 ms, faster than 13.25% of Python online submissions for Missing Number.
+Memory Usage: 12.7 MB, less than 59.65% of Python online submissions for Missing Number.
+```python
+def missingNumber(nums):
+    if not nums: return 0
+    for i in xrange(len(nums)):
+        if nums[i]==i or nums[i]==len(nums): 
+            continue
+        while nums[i]!=i:
+            print('i={},nums[i]={},nums[nums[i]]={}'.format(i,nums[i],nums[nums[i]]))
+            t=nums[nums[i]]
+            nums[nums[i]]=nums[i]
+            nums[i]=t
+            if nums[i]==len(nums): break
+    for i in xrange(len(nums)):
+        if nums[i]==len(nums): return i
+    return len(nums)
+```
+
+
+Math solution.
+The idea is simple, we have `0->n` numbers, if we sum them up, we have a expected value,
+`SUM(0->n)=(n*(n+1))//2`.
+Then we can sum up the actual array, the difference between expcted value and actual sum value is the number we're looking for.
+Runtime: 128 ms, faster than 26.19% of Python online submissions for Missing Number.
+Memory Usage: 12.6 MB, less than 61.40% of Python online submissions for Missing Number.
+```python
+def missingNumber(nums):
+    s=(len(nums)*(len(nums)+1))//2
+    # or we can use sum function to get the expected sum
+    # s=sum(range(len(nums)+1))
+    a=sum(nums)
+    return s-a
+```
+
+Runtime: 108 ms, faster than 97.20% of Python online submissions for Missing Number.
+Memory Usage: 12.7 MB, less than 57.89% of Python online submissions for Missing Number.
+```python
+def missingNumber(self, nums):
+    return sum(range(len(nums)+1))-sum(nums)
+```
+
+
+Bitwise manipultate solution.
+Runtime: 124 ms, faster than 36.86% of Python online submissions for Missing Number.
+Memory Usage: 12.6 MB, less than 61.40% of Python online submissions for Missing Number.
+```python
+def missingNumber(nums):
+    x=len(nums)
+    for i,n in enumerate(nums):
+        x^=(i^n)
+    return x
+```

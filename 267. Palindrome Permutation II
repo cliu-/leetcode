@@ -1,0 +1,51 @@
+267. Palindrome Permutation II
+Medium
+
+Given a string s, return all the palindromic permutations (without duplicates) of it. Return an empty list if no palindromic permutation could be form.
+
+Example 1:
+
+Input: "aabb"
+Output: ["abba", "baab"]
+Example 2:
+
+Input: "abc"
+Output: []
+
+
+```python
+class Solution(object):
+    def generatePalindromes(self, s):
+        """
+        :type s: str
+        :rtype: List[str]
+        """
+```
+
+
+Runtime: 16 ms, faster than 90.28% of Python online submissions for Palindrome Permutation II.
+Memory Usage: 11.9 MB, less than 100.00% of Python online submissions for Palindrome Permutation II.
+```python
+def generatePalindromes(s):
+    map={}
+    for c in s:
+        map[c]=map.get(c,0)+1
+    s,odd='',[]
+    for k,v in map.items():
+        if v%2!=0: odd,v=odd+[k],v-1
+        s=s+(k*v)
+    print('s={},odd={}'.format(s,odd))
+    if len(odd)>1: return []
+    ans=[]
+    def func(s,cur=''):
+        if not s:
+            ans.append(cur+(odd[0] if odd else '')+cur[::-1])
+            return
+        for i in xrange(0,len(s),2):
+            if i>0 and s[i]==s[i-2]: continue
+            cur+=s[i]
+            func(s[:i]+s[i+2:],cur)
+            cur=cur[:-1]
+    func(s)
+    return ans
+```

@@ -1,0 +1,111 @@
+269. Alien Dictionary
+Hard
+
+There is a new alien language which uses the latin alphabet. However, the order among letters are unknown to you. You receive a list of non-empty words from the dictionary, where words are sorted lexicographically by the rules of this new language. Derive the order of letters in this language.
+
+Example 1:
+
+Input:
+[
+  "wrt",
+  "wrf",
+  "er",
+  "ett",
+  "rftt"
+]
+
+Output: "wertf"
+
+
+Example 2:
+
+Input:
+[
+  "z",
+  "x"
+]
+
+Output: "zx"
+
+
+Example 3:
+
+Input:
+[
+  "z",
+  "x",
+  "z"
+] 
+
+Output: "" 
+
+Explanation: The order is invalid, so return "".
+
+
+Note:
+
+You may assume all letters are in lowercase.
+You may assume that if a is a prefix of b, then a must appear before b in the given dictionary.
+If the order is invalid, return an empty string.
+There may be multiple valid order of letters, return any one of them is fine.
+
+
+```python
+class Solution(object):
+    def alienOrder(self, words):
+        """
+        :type words: List[str]
+        :rtype: str
+        """
+```
+
+
+Runtime: 24 ms, faster than 47.59% of Python online submissions for Alien Dictionary.
+Memory Usage: 11.9 MB, less than 30.00% of Python online submissions for Alien Dictionary.
+```python
+def alienOrder(words):
+    if not words: return []
+    edges,verts={},set([c for w in words for c in w])
+    def func(words):
+        if len(words)<=1: return
+        map={}
+        for w in words:
+            if not w: continue
+            if w[0] in map:
+                map[w[0]].append(w[1:])
+            else:
+                if map:
+                    k,v=map.popitem()
+                    if k in edges: edges[k].add(w[0])
+                    else: edges[k]={w[0], }
+                    func(v)
+                map[w[0]]=[w[1:]]
+        if map: func(map.popitem()[1])
+    func(words)
+    # print("edges={}".format(edges))
+    # print("verts={}".format(verts))
+    ans,seen,tmp=[''],set(),set()
+    def func2(n):
+        if n in seen: return True
+        if n in tmp: return False
+        if n in edges:
+            tmp.add(n)
+            for m in edges[n]:
+                if not func2(m):
+                    return False
+            tmp.remove(n)
+        seen.add(n)
+        ans[0]=n+ans[0]
+        return True
+    for v in verts:
+        if v not in seen:
+            if not func2(v):
+                return ''
+    return ans[0]
+```
+
+["wrt","wtf","rta","rwf"]
+
+["wtt","wtf","tta","ywf"]
+
+["wrt","wrf","er","ett","rftt"]

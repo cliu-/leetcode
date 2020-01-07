@@ -1,0 +1,46 @@
+266. Palindrome Permutation
+Easy
+
+Given a string, determine if a permutation of the string could form a palindrome.
+
+Example 1:
+
+Input: "code"
+Output: false
+
+Example 2:
+
+Input: "aab"
+Output: true
+
+Example 3:
+
+Input: "carerac" 
+Output: true
+
+
+```python
+class Solution(object):
+    def canPermutePalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+
+```
+
+
+Runtime: 20 ms, faster than 40.37% of Python online submissions for Palindrome Permutation.
+Memory Usage: 11.8 MB, less than 50.00% of Python online submissions for Palindrome Permutation.
+```python
+def canPermutePalindrome(s):
+    map={}
+    for c in s:
+        if c not in map: map[c]=1
+        else: map[c]+=1
+    f=0
+    for v in map.values():
+        if v%2!=0: f+=1
+        if f>1: return False
+    return True
+```
