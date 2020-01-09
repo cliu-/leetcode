@@ -1,0 +1,108 @@
+282. Expression Add Operators
+Hard
+
+Given a string that contains only digits 0-9 and a target value, return all possibilities to add binary operators (not unary) +, -, or * between the digits so they evaluate to the target value.
+
+Example 1:
+
+Input: num = "123", target = 6
+Output: ["1+2+3", "1*2*3"] 
+
+Example 2:
+
+Input: num = "232", target = 8
+Output: ["2*3+2", "2+3*2"]
+
+Example 3:
+
+Input: num = "105", target = 5
+Output: ["1*0+5","10-5"]
+
+Example 4:
+
+Input: num = "00", target = 0
+Output: ["0+0", "0-0", "0*0"]
+
+Example 5:
+
+Input: num = "3456237490", target = 9191
+Output: []
+
+
+```python
+class Solution(object):
+    def addOperators(self, num, target):
+        """
+        :type num: str
+        :type target: int
+        :rtype: List[str]
+        """
+```
+
+
+Time limit exceeded
+```python
+def addOperators(num, target):
+    ans=[]
+    def func(s,t,cur=''):
+        # print('s={},cur={}'.format(s,cur))
+        if not s:
+            if eval(cur)==t:
+                ans.append(cur)
+            return
+        for i in range(1,len(s)+1):
+            # print('i={},s[:i]={},s[i:]={}'.format(i,s[:i],s[i:]))
+            if not cur: 
+                func(s[i:],t,s[:i])
+            else:
+                for o in ['+','-','*']:
+                    k=(o if cur else '')+s[:i]
+                    func(s[i:],t,cur+k)
+            if s[0]=='0':
+                break
+    func(num,target)
+    return ans
+```
+
+
+Runtime: 892 ms, faster than 69.04% of Python online submissions for Expression Add Operators.
+Memory Usage: 12.2 MB, less than 50.00% of Python online submissions for Expression Add Operators.
+```python
+def addOperators(num, target):
+    ans=[]
+    def func(s,t,pre=0,val=0,cur=''):
+        # print('s={},cur={}'.format(s,cur))
+        if not s:
+            if val==t:
+                ans.append(cur)
+            return
+        for i in range(1,len(s)+1):
+            # print('i={},s[:i]={},s[i:]={}'.format(i,s[:i],s[i:]))
+            n=int(s[:i])
+            if not cur: 
+                func(s[i:],t,0,n,s[:i])
+            else:
+                for o in ['+','-','*']:
+                    k=cur+(o if cur else '')+s[:i]
+                    if o=='+': func(s[i:],t,val,val+n,k)
+                    elif o=='-': func(s[i:],t,val,val-n,k)
+                    elif o=='*': func(s[i:],t,pre,pre+(val-pre)*n,k)
+            if s[0]=='0':
+                break
+    func(num,target)
+    return ans
+```
+
+
+
+"2147483647"
+2147483647
+
+"1005"
+5
+
+"105"
+5
+
+"123456789"
+30

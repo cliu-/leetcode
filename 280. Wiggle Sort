@@ -1,0 +1,35 @@
+280. Wiggle Sort
+Medium
+
+Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
+
+Example:
+
+Input: nums = [3,5,2,1,6,4]
+Output: One possible answer is [3,5,1,6,2,4]
+
+```python
+class Solution(object):
+    def wiggleSort(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+```
+
+
+Runtime: 80 ms, faster than 67.06% of Python online submissions for Wiggle Sort.
+Memory Usage: 12.8 MB, less than 33.33% of Python online submissions for Wiggle Sort.
+```python
+def wiggleSort(nums):
+    if len(nums)<2: return nums
+    if nums[0]>nums[1]: nums[0],nums[1]=nums[1],nums[0]
+    u=True
+    for i in xrange(2,len(nums)):
+        if (nums[i]>nums[i-1] and u) or (nums[i]<nums[i-1] and not u):
+            nums[i],nums[i-1]=nums[i-1],nums[i]
+        if nums[i]>nums[i-1]: u=True
+        elif nums[i]<nums[i-1]: u=False
+        else: u=not u
+    return nums
+```

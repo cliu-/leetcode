@@ -1,0 +1,87 @@
+279. Perfect Squares
+Medium
+
+Given a positive integer n, find the least number of perfect square numbers (for example, 1, 4, 9, 16, ...) which sum to n.
+
+Example 1:
+
+Input: n = 12
+Output: 3 
+Explanation: 12 = 4 + 4 + 4.
+Example 2:
+
+Input: n = 13
+Output: 2
+Explanation: 13 = 4 + 9.
+
+
+```python
+class Solution(object):
+    def numSquares(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+```
+
+
+Time Limit Exceeded
+```python
+def numSquares(n):
+    map={1:1,2:2,3:3,4:1,5:2}
+    def func(n):
+        if n in map: return map[n]
+        t,r=int(n**0.5),2**31
+        for i in xrange(t,0,-1):
+            k=func(n-(i**2))
+            if k<r: r=k
+        map[n]=1+r
+        return map[n]
+    return func(n)
+```
+
+
+Runtime: 1516 ms, faster than 73.45% of Python online submissions for Perfect Squares.
+Memory Usage: 13.1 MB, less than 24.00% of Python online submissions for Perfect Squares.
+```python
+def numSquares(n):
+    if n==1: return 1
+    a=[1]
+    map,a={1:1},[1]
+    for i in xrange(2,n+1):
+        if (len(a)+1)**2==i:
+            map[i]=1
+            a.append(i)
+        else:
+            t=2**31
+            for j in a:
+                if map[i-j]+1<t:
+                    t=map[i-j]+1
+            map[i]=t
+    return map[n]
+```
+
+
+Runtime: 12 ms, faster than 99.74% of Python online submissions for Perfect Squares.
+Memory Usage: 11.8 MB, less than 68.00% of Python online submissions for Perfect Squares.
+Math solution.
+List the answer for n(1->20), we can find the set of answer is [1,2,3,4]. 
+when the answer equals 1? if (int(n**0.5))**2==n
+when the answer equals 2? if n=x+y where f(x)==1 and f(y)==1
+when the answer equals 4? if n%8==7
+when the answer equals 3? the rest of other case
+```python
+def numSquares(n):
+    while n%4==0: n//=4 ## This would reduce the input dataset.
+    if int(n**0.5)**2==n:
+        return 1
+    if n%8==7:
+        return 4
+    x=1
+    while x**2<n:
+        y=n-x**2
+        if int(y**0.5)**2==y:
+            return 2
+        x+=1
+    return 3
+```
