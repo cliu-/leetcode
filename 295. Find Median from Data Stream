@@ -1,0 +1,90 @@
+295. Find Median from Data Stream
+Hard
+
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+For example,
+[2,3,4], the median is 3
+
+[2,3], the median is (2 + 3) / 2 = 2.5
+
+Design a data structure that supports the following two operations:
+
+void addNum(int num) - Add a integer number from the data stream to the data structure.
+double findMedian() - Return the median of all elements so far.
+ 
+
+Example:
+
+addNum(1)
+addNum(2)
+findMedian() -> 1.5
+addNum(3) 
+findMedian() -> 2
+ 
+
+Follow up:
+
+If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+
+
+Runtime: 304 ms, faster than 44.42% of Python online submissions for Find Median from Data Stream.
+Memory Usage: 23.8 MB, less than 58.33% of Python online submissions for Find Median from Data Stream.
+```python
+from heapq import heappush,heappop
+class MedianFinder(object):
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.arr1=[] ## negative value array
+        self.arr2=[] ## original value array
+        
+
+    def addNum(self, num):
+        """
+        :type num: int
+        :rtype: None
+        """
+        if not self.arr1 and not self.arr2:
+            heappush(self.arr1,-num)
+        elif num<=-self.arr1[0]:
+            heappush(self.arr1,-num)
+            while len(self.arr1)>len(self.arr2):
+                heappush(self.arr2,-(heappop(self.arr1)))
+        elif self.arr2 and num>=self.arr2[0]:
+            heappush(self.arr2,num)
+            while len(self.arr2)>len(self.arr1):
+                heappush(self.arr1,-(heappop(self.arr2)))
+        else:
+            if len(self.arr1)<=len(self.arr2):
+                heappush(self.arr1,-num)
+            else:
+                heappush(self.arr2,num)
+        print('arr1={},arr2={}'.format(self.arr1,self.arr2))
+        
+
+    def findMedian(self):
+        """
+        :rtype: float
+        """
+        if (len(self.arr1)+len(self.arr2))%2==0:
+            return (-self.arr1[0]+self.arr2[0])/2.0
+        else:
+            return -self.arr1[0] if len(self.arr1)>len(self.arr2) else self.arr2[0]
+        
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
+```
+
+
+["MedianFinder","addNum","findMedian","addNum","findMedian","addNum","findMedian","addNum","findMedian","addNum","findMedian"]
+[[],[-1],[],[-2],[],[-3],[],[-4],[],[-5],[]]
+[null,null,-1.0,null,-1.5,null,-2.0,null,-2.5,null,-3.0]
+[null,null,-1.00000,null,-1.50000,null,-3.00000,null,-2.50000,null,-4.00000]

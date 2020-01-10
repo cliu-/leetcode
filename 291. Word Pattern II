@@ -1,0 +1,83 @@
+291. Word Pattern II
+Hard
+
+Given a pattern and a string str, find if str follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty substring in str.
+
+Example 1:
+
+Input: pattern = "abab", str = "redblueredblue"
+Output: true
+
+Example 2:
+
+Input: pattern = pattern = "aaaa", str = "asdasdasdasd"
+Output: true
+
+Example 3:
+
+Input: pattern = "aabb", str = "xyzabcxzyabc"
+Output: false
+
+Notes:
+You may assume both pattern and str contains only lowercase letters.
+
+
+```python
+class Solution(object):
+    def wordPatternMatch(self, pattern, str):
+        """
+        :type pattern: str
+        :type str: str
+        :rtype: bool
+        """
+```
+
+
+Runtime: 252 ms, faster than 23.74% of Python online submissions for Word Pattern II.
+Memory Usage: 11.7 MB, less than 57.14% of Python online submissions for Word Pattern II.
+```python
+def wordPatternMatch(pattern, str):
+    if pattern==str: return True
+    if not pattern or not str: return False
+    def func(p,s,pi=0,si=0,p2s={},s2p={}):
+        if pi==len(p) and si==len(s):
+            return True
+        if (pi!=len(p) and si==len(s)) or (pi==len(p) and si!=len(s)):
+            return False
+        if p[pi] not in p2s:
+            for i in xrange(si+1,len(s)+1):
+                if s[si:i] in s2p: continue
+                p2s[p[pi]],s2p[s[si:i]]=s[si:i],p[pi]
+                if func(p,s,pi+1,i,p2s,s2p):
+                    return True
+                else:
+                    p2s.pop(p[pi])
+                    s2p.pop(s[si:i])
+            return False
+        else:
+            t=p2s[p[pi]]
+            if si+len(t)<=len(s) and s[si:si+len(t)]==t and s2p.get(t,'')==p[pi]:
+                return func(p,s,pi+1,si+len(t),p2s,s2p)
+            else:
+                return False
+    return func(pattern,str)
+```
+
+
+"aabb"
+"xyzabcxzyabc"
+False
+
+"aabb"
+"redblueredblue"
+True
+
+"aaaa"
+"asdasdasdasd"
+True
+
+"ab"
+"aa"
+False
