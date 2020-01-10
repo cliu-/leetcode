@@ -5,10 +5,10 @@ According to the Wikipedia's article: "The Game of Life, also known simply as Li
 
 Given a board with m by n cells, each cell has an initial state live (1) or dead (0). Each cell interacts with its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):
 
-Any live cell with fewer than two live neighbors dies, as if caused by under-population.
-Any live cell with two or three live neighbors lives on to the next generation.
-Any live cell with more than three live neighbors dies, as if by over-population..
-Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+1. Any live cell with fewer than two live neighbors dies, as if caused by under-population.
+2. Any live cell with two or three live neighbors lives on to the next generation.
+3. Any live cell with more than three live neighbors dies, as if by over-population..
+4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
 Write a function to compute the next state (after one update) of the board given its current state. The next state is created by applying the above rules simultaneously to every cell in the current state, where births and deaths occur simultaneously.
 
 Example:
@@ -40,4 +40,37 @@ class Solution(object):
         :type board: List[List[int]]
         :rtype: None Do not return anything, modify board in-place instead.
         """
+```
+
+Runtime: 20 ms, faster than 66.11% of Python online submissions for Game of Life.
+Memory Usage: 11.8 MB, less than 37.50% of Python online submissions for Game of Life.
+```python
+def gameOfLife(board):
+    m,n=len(board),len(board[0])
+    def func(i,j,m,n):
+        lives=0
+        arr=[(-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]
+        for di,dj in arr:
+            x,y=i+di,j+dj
+            if 0<=x<m and 0<=y<n:
+                if board[x][y]==1 or board[x][y]==101 or board[x][y]==111:
+                    lives+=1
+        if board[i][j]==1:
+            if lives<2 or lives>3: 
+                board[i][j]=101
+            else:
+                board[i][j]=111
+        else:
+            if lives==3:
+                board[i][j]=110
+
+    for i in xrange(m):
+        for j in xrange(n):
+            func(i,j,m,n)
+    for i in xrange(m):
+        for j in xrange(n):
+            if board[i][j]==100 or board[i][j]==101:
+                board[i][j]=0
+            elif board[i][j]==110 or board[i][j]==111:
+                board[i][j]=1
 ```
