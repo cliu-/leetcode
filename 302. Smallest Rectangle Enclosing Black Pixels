@@ -26,3 +26,20 @@ class Solution(object):
         :rtype: int
         """
 ```
+
+
+Runtime: 376 ms, faster than 47.83% of Python online submissions for Smallest Rectangle Enclosing Black Pixels.
+Memory Usage: 13.6 MB, less than 66.67% of Python online submissions for Smallest Rectangle Enclosing Black Pixels.
+```python
+def minArea(image, x, y):
+    t=l=2**31
+    b=r=0
+    for i in xrange(len(image)):
+        for j in xrange(len(image[0])):
+            if image[i][j]=='1':
+                t=min(i,t)
+                b=max(i,b)
+                l=min(j,l)
+                r=max(j,r)
+    return (b-t+1)*(r-l+1)
+```
