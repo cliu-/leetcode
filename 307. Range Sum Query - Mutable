@@ -1,0 +1,115 @@
+307. Range Sum Query - Mutable
+Medium
+
+Given an integer array nums, find the sum of the elements between indices i and j (i ≤ j), inclusive.
+
+The update(i, val) function modifies nums by updating the element at index i to val.
+
+Example:
+
+Given nums = [1, 3, 5]
+
+sumRange(0, 2) -> 9
+update(1, 2)
+sumRange(0, 2) -> 8
+Note:
+
+The array is only modifiable by the update function.
+You may assume the number of calls to update and sumRange function is distributed evenly.
+
+
+
+Segment Tree solution.
+Runtime: 
+init: O(N+LogN); update: O(LogN); sum: O(LogN)
+Space:
+init: O(N+LogN); update: O(1); sum: O(1)
+Runtime: 228 ms, faster than 52.53% of Python online submissions for Range Sum Query - Mutable.
+Memory Usage: 55 MB, less than 12.50% of Python online submissions for Range Sum Query - Mutable.
+```python
+from collections import deque
+class TreeNode(object):
+    def __init__(self,i,j,v):
+        self.i=i
+        self.j=j
+        self.v=v
+        self.left=None
+        self.right=None
+        self.parent=None
+
+class NumArray(object):
+
+    def __init__(self, nums):
+        """
+        :type nums: List[int]
+        """
+        if len(nums)<1: return
+        self.map={}
+        q=deque()
+        for i in xrange(len(nums)):
+            n=TreeNode(i,i,nums[i])
+            q.append(n)
+            self.map[(i,i)]=n
+        while len(q)>1:
+            q1=deque()
+            while len(q)>1:
+                n1=q.popleft()
+                n2=q.popleft()
+                if n1.i>n2.j: n1,n2=n2,n1
+                n3=TreeNode(n1.i,n2.j,n1.v+n2.v)
+                n3.left,n3.right=n1,n2
+                n1.parent=n2.parent=n3
+                self.map[(n3.i,n3.j)]=n3
+                q1.append(n3)
+            while q: q1.append(q.popleft())
+            q=q1
+        self.root=q.popleft()
+        
+    
+
+    def update(self, i, val):
+        """
+        :type i: int
+        :type val: int
+        :rtype: None
+        """
+        node=self.map[(i,i)]
+        d=val-node.v
+        while node:
+            node.v+=d
+            node=node.parent
+        
+
+    def sumRange(self, i, j):
+        """
+        :type i: int
+        :type j: int
+        :rtype: int
+        """
+        if (i,j) in self.map:
+            return self.map[(i,j)].v
+        def func(i,j,node):
+            if i<=node.i and j>=node.j:
+                return node.v
+            if not node.left and not node.right:
+                return node.v
+            if j<=node.left.j:
+                return func(i,j,node.left)
+            if i>=node.right.i:
+                return func(i,j,node.right)
+            return func(i,node.left.j,node.left)+func(node.right.i,j,node.right)
+        return func(i,j,self.root)
+        
+
+
+# Your NumArray object will be instantiated and called as such:
+# obj = NumArray(nums)
+# obj.update(i,val)
+# param_2 = obj.sumRange(i,j)
+```
+
+["NumArray","sumRange","update","sumRange"]
+[[[1,3,5]],[0,2],[1,2],[0,2]]
+
+["NumArray","sumRange","update","sumRange"]
+[[[1,3,5,7,9,11,23,6,4,56,0]],[3,7],[5,2],[3,8]]

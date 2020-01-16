@@ -1,0 +1,171 @@
+305. Number of Islands II
+Hard
+
+A 2d grid map of m rows and n columns is initially filled with water. We may perform an addLand operation which turns the water at position (row, col) into a land. Given a list of positions to operate, count the number of islands after each addLand operation. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example:
+```
+Input: m = 3, n = 3, positions = [[0,0], [0,1], [1,2], [2,1]]
+Output: [1,1,2,3]
+Explanation:
+
+Initially, the 2d grid grid is filled with water. (Assume 0 represents water and 1 represents land).
+
+0 0 0
+0 0 0
+0 0 0
+
+Operation #1: addLand(0, 0) turns the water at grid[0][0] into a land.
+
+1 0 0
+0 0 0   Number of islands = 1
+0 0 0
+
+Operation #2: addLand(0, 1) turns the water at grid[0][1] into a land.
+
+1 1 0
+0 0 0   Number of islands = 1
+0 0 0
+
+Operation #3: addLand(1, 2) turns the water at grid[1][2] into a land.
+
+1 1 0
+0 0 1   Number of islands = 2
+0 0 0
+
+Operation #4: addLand(2, 1) turns the water at grid[2][1] into a land.
+
+1 1 0
+0 0 1   Number of islands = 3
+0 1 0
+```
+
+Follow up:
+
+Can you do it in time complexity O(k log mn), where k is the length of the positions?
+
+
+```python
+class Solution(object):
+    def numIslands2(self, m, n, positions):
+        """
+        :type m: int
+        :type n: int
+        :type positions: List[List[int]]
+        :rtype: List[int]
+        """
+```
+
+
+Union find solution.
+Runtime: 588 ms, faster than 11.17% of Python online submissions for Number of Islands II.
+Memory Usage: 26 MB, less than 25.00% of Python online submissions for Number of Islands II.
+```python
+class E(object):
+
+    def __init__(self,x,y):
+        self.parent=(x,y)
+        self.rank=0
+
+
+class Solution(object):
+
+    def numIslands2(self, m, n, positions):
+        map,rootset={},set()
+
+        def find(x,y):
+            e=map[(x,y)]
+            if (x,y)!=e.parent:
+                e.parent=find(e.parent[0],e.parent[1])
+            return e.parent
+
+        def union(x,y):
+            if (x,y) not in map:
+                map[(x,y)]=E(x,y)
+            offset=[(-1,0),(1,0),(0,-1),(0,1)]
+            merged=False
+            root1=find(x,y)
+            for ox,oy in offset:
+                xx,yy=x+ox,y+oy
+                if xx<0 or yy<0 or xx>=m or yy>=n:
+                    continue
+                if (xx,yy) in map:
+                    root2=find(xx,yy)
+                    if root1 in rootset: rootset.remove(root1)
+                    if root2 in rootset: rootset.remove(root2)
+                    if map[root2].rank>map[root1].rank:
+                        map[root1].parent=root2
+                        rootset.add(root2)
+                        root1=root2
+                    elif map[root1].rank>map[root2].rank:
+                        map[root2].parent=root1
+                        rootset.add(root1)
+                    else:
+                        map[root1].parent=root2
+                        map[root2].rank+=1
+                        rootset.add(root2)
+                        root1=root2
+                    merged=True
+            if not merged:
+                rootset.add(map[(x,y)].parent)
+
+        ans=[]
+        for p in positions:
+            union(p[0],p[1])
+            ans.append(len(rootset))
+        return ans
+```
+
+
+Optimized for this particular problem.
+```python
+class Solution(object):
+    def numIslands2(self, m, n, positions):
+        parent = {}
+        size = {}
+        
+        def find(u):
+            if parent[u] != u:
+                parent[u] = find(parent[u])
+            return parent[u]
+        
+        def union(u, v):
+            p, q = find(u), find(v)
+            if p != q:
+                if size[p] < size[q]:
+                    p, q = q, p
+                parent[q] = p
+                size[p] += size[q]
+                return True
+            return False
+        
+        res = []
+        num_island = 0
+        for pos in positions:
+            pos = tuple(pos)
+            if pos in parent:   # pos is already island, duplicate
+                res.append(num_island)
+                continue
+            parent[pos] = pos
+            size[pos] = 1
+            num_island += 1
+            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                p, q = pos[0] + dx, pos[1] + dy
+                nei = (p, q)
+                if nei in parent and union(nei, pos):
+                    num_island -= 1
+            res.append(num_island)
+        
+        return res
+```
+
+
+
+
+3
+3
+[[0,0],[0,1],[1,2],[2,1]]
+
+3
+3
+[[0,1],[1,2],[2,1],[1,0],[0,2],[0,0],[1,1]]
