@@ -15,3 +15,41 @@ Input: [3,1,5,8]
 Output: 167 
 Explanation: nums = [3,1,5,8] --> [3,5,8] -->   [3,8]   -->  [8]  --> []
              coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167
+
+
+```python
+class Solution(object):
+    def maxCoins(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+```
+
+
+Runtime: 732 ms, faster than 27.62% of Python online submissions for Burst Balloons.
+Memory Usage: 14.6 MB, less than 14.29% of Python online submissions for Burst Balloons.
+```python
+def maxCoins(nums):
+    nums=[1]+nums+[1]
+    map={}
+    def dp(l,r):
+        if l+1==r: return 0
+        if (l,r) in map:
+            return map[(l,r)]
+        ans=0
+        for i in xrange(l+1,r):
+            t=nums[l]*nums[i]*nums[r]+dp(l,i)+dp(i,r)
+            if t>ans: ans=t
+        map[(l,r)]=ans
+        return ans
+    return dp(0,len(nums)-1)
+```
+
+
+
+[3, 1, 5, 8]
+[3,15,40, 40]
+
+
+[1,3,2]
