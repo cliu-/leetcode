@@ -36,38 +36,60 @@ The same solution as `264. Ugly Number II`.
 Runtime: 1656 ms, faster than 12.26% of Python online submissions for Super Ugly Number.
 Memory Usage: 82.9 MB, less than 25.00% of Python online submissions for Super Ugly Number.
 ```python
-from heapq import heapq_push,heapq_pop
+from heapq import heappush,heappop
 def nthSuperUglyNumber(n, primes):
     h,a,seen=[1],[],{1, }
     while len(a)<n:
-        x=heapq_pop(h)
+        x=heappop(h)
         a.append(x)
         for y in primes:
             z=x*y
             if z not in seen:
-                heapq_push(h,z)
+                heappush(h,z)
                 seen.add(z)
     return a[-1] 
 ```
 
 
+Runtime: O(n*k), where k is the length of `primes`.
+Runtime: 1132 ms, faster than 38.58% of Python online submissions for Super Ugly Number.
+Memory Usage: 14.6 MB, less than 100.00% of Python online submissions for Super Ugly Number.
+```python
+from heapq import heapify,heappush,heappop
+def nthSuperUglyNumber(n, primes):
+    if n==1: return 1
+    arr=[1]
+    h=primes[::]
+    idx=[0]*len(primes)
+    while len(arr)<n:
+        m=heappop(h)
+        if m!=arr[-1]: arr.append(m)
+        i=0
+        while i<len(idx):
+            if arr[idx[i]]*primes[i]==m:
+                break
+            i+=1
+        idx[i]=idx[i]+1
+        heappush(h,arr[idx[i]]*primes[i])
+    return arr[-1]
+```
 
-import heapq
-class Solution(object):
-    def nthSuperUglyNumber(self, n, primes):
-        """
-        :type n: int
-        :type primes: List[int]
-        :rtype: int
-        """
-        if n==1: return 1
-        pq,res=[(i, i, 0) for i in primes],[1]*n
-        heapq.heapify(pq)
-        for m in range(1,n):
-            p=pq[0][0]
-            while pq[0][0]==p:
-                x,y,z=heapq.heappop(pq)
-                res[m],z=x,z+1
-                x=res[z]*y
-                heapq.heappush(pq, (x,y,z))
-        return res[-1]
+
+Runtime: 348 ms, faster than 83.76% of Python online submissions for Super Ugly Number.
+Memory Usage: 14.9 MB, less than 100.00% of Python online submissions for Super Ugly Number.
+```python
+from heapq import heapify,heappush,heappop
+def nthSuperUglyNumber(n, primes):
+    if n==1: return 1
+    arr=[1]*n
+    h=[(p,p,0) for p in primes]
+    for k in xrange(1,n):
+        m=h[0][0]
+        while m==h[0][0]:
+            x,y,z=heappop(h)
+            arr[k]=x
+            z=z+1
+            x=arr[z]*y
+            heappush(h,(x,y,z))
+    return arr[-1]
+```
