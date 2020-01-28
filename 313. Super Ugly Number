@@ -51,6 +51,7 @@ def nthSuperUglyNumber(n, primes):
 ```
 
 
+Runtime: O(n*k), where k is the length of `primes`.
 Runtime: 1176 ms, faster than 35.03% of Python online submissions for Super Ugly Number.
 Memory Usage: 14.6 MB, less than 100.00% of Python online submissions for Super Ugly Number.
 ```python
@@ -74,25 +75,21 @@ def nthSuperUglyNumber(n, primes):
 ```
 
 
-
-
-
-import heapq
-class Solution(object):
-    def nthSuperUglyNumber(self, n, primes):
-        """
-        :type n: int
-        :type primes: List[int]
-        :rtype: int
-        """
-        if n==1: return 1
-        pq,res=[(i, i, 0) for i in primes],[1]*n
-        heapq.heapify(pq)
-        for m in range(1,n):
-            p=pq[0][0]
-            while pq[0][0]==p:
-                x,y,z=heapq.heappop(pq)
-                res[m],z=x,z+1
-                x=res[z]*y
-                heapq.heappush(pq, (x,y,z))
-        return res[-1]
+Runtime: 348 ms, faster than 83.76% of Python online submissions for Super Ugly Number.
+Memory Usage: 14.9 MB, less than 100.00% of Python online submissions for Super Ugly Number.
+```python
+from heapq import heapify,heappush,heappop
+def nthSuperUglyNumber(n, primes):
+    if n==1: return 1
+    arr=[1]*n
+    h=[(p,p,0) for p in primes]
+    for k in xrange(1,n):
+        m=h[0][0]
+        while m==h[0][0]:
+            x,y,z=heappop(h)
+            arr[k]=x
+            z=z+1
+            x=arr[z]*y
+            heappush(h,(x,y,z))
+    return arr[-1]
+```
