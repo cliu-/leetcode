@@ -36,19 +36,44 @@ The same solution as `264. Ugly Number II`.
 Runtime: 1656 ms, faster than 12.26% of Python online submissions for Super Ugly Number.
 Memory Usage: 82.9 MB, less than 25.00% of Python online submissions for Super Ugly Number.
 ```python
-from heapq import heapq_push,heapq_pop
+from heapq import heappush,heappop
 def nthSuperUglyNumber(n, primes):
     h,a,seen=[1],[],{1, }
     while len(a)<n:
-        x=heapq_pop(h)
+        x=heappop(h)
         a.append(x)
         for y in primes:
             z=x*y
             if z not in seen:
-                heapq_push(h,z)
+                heappush(h,z)
                 seen.add(z)
     return a[-1] 
 ```
+
+
+Runtime: 1176 ms, faster than 35.03% of Python online submissions for Super Ugly Number.
+Memory Usage: 14.6 MB, less than 100.00% of Python online submissions for Super Ugly Number.
+```python
+from heapq import heapify,heappush,heappop
+def nthSuperUglyNumber(n, primes):
+    if n==1: return 1
+    arr=[1]
+    h=primes[::]
+    idx=[0]*len(primes)
+    while len(arr)<n:
+        m=heappop(h)
+        if m!=arr[-1]: arr.append(m)
+        i=0
+        while i<len(idx):
+            if arr[idx[i]]*primes[i]==m:
+                break
+            i+=1
+        idx[i]=idx[i]+1
+        heappush(h,arr[idx[i]]*primes[i])
+    return arr[-1]
+```
+
+
 
 
 
