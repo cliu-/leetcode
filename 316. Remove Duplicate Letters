@@ -1,0 +1,64 @@
+316. Remove Duplicate Letters
+Hard
+
+Given a string which contains only lowercase letters, remove duplicate letters so that every letter appears once and only once. You must make sure your result is the smallest in lexicographical order among all possible results.
+
+Example 1:
+
+Input: "bcabc"
+Output: "abc"
+Example 2:
+
+Input: "cbacdcbc"
+Output: "acdb"
+
+
+```python
+class Solution(object):
+    def removeDuplicateLetters(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+```
+
+
+Greedy solution. Runtime O(N), space O(N)
+Runtime: 140 ms, faster than 9.09% of Python online submissions for Remove Duplicate Letters.
+Memory Usage: 12 MB, less than 50.00% of Python online submissions for Remove Duplicate Letters.
+```python
+from collections import Counter
+def removeDuplicateLetters(s):
+    ans=''
+    c = Counter(s)
+    while c:
+        p=0
+        for i in xrange(len(s)):
+            if s[i]<s[p]: p=i
+            c[s[i]]-=1
+            if c[s[i]]==0:
+                break
+        ans=ans+s[p]
+        s=s[p:].replace(s[p],'')
+        c=Counter(s)
+    return ans
+```
+
+
+Stack greedy solution.
+Runtime: 20 ms, faster than 90.21% of Python online submissions for Remove Duplicate Letters.
+Memory Usage: 11.8 MB, less than 50.00% of Python online submissions for Remove Duplicate Letters.
+```python
+from collections import Counter
+def removeDuplicateLetters(s):
+    map={c:i for i,c in enumerate(s)}
+    stack=[]
+    seen=set()
+    for i in xrange(len(s)):
+        if s[i] in seen: continue
+        while stack and s[i]<stack[-1] and i<map[stack[-1]]:
+            seen.discard(stack.pop())
+        stack.append(s[i])
+        seen.add(s[i])
+    return ''.join(stack)
+```
