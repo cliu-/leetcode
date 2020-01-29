@@ -35,8 +35,8 @@ class Solution(object):
 ```
 
 
-Wrong answer, failed at case `[[1,1,1,1,1,0],[0,0,0,0,0,1],[0,1,1,0,0,1],[1,0,0,1,0,1],[1,0,1,0,0,1],[1,0,0,0,0,1],[0,1,1,1,1,0]]`
-
+Runtime: 836 ms, faster than 37.37% of Python online submissions for Shortest Distance from All Buildings.
+Memory Usage: 12.7 MB, less than 50.00% of Python online submissions for Shortest Distance from All Buildings.
 ```python
 from collections import deque,defaultdict
 def shortestDistance(grid):
@@ -59,7 +59,7 @@ def shortestDistance(grid):
         q=deque([(bi,bj)])
         seen=set()
         while q:
-            i,j=q.pop()
+            i,j=q.popleft()
             val=grid[i][j]
             for offi,offj in nb:
                 ii,jj=i+offi,j+offj
