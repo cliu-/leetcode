@@ -1,0 +1,49 @@
+320. Generalized Abbreviation
+Medium
+
+Write a function to generate the generalized abbreviations of a word. 
+
+Note: The order of the output does not matter.
+
+Example:
+
+Input: "word"
+Output:
+["word", "1ord", "w1rd", "wo1d", "wor1", "2rd", "w2d", "wo2", "1o1d", "1or1", "w1r1", "1o2", "2r1", "3d", "w3", "4"]
+
+```python
+class Solution(object):
+    def generateAbbreviations(self, word):
+        """
+        :type word: str
+        :rtype: List[str]
+        """
+```
+
+Runtime: 140 ms, faster than 96.12% of Python online submissions for Generalized Abbreviation.
+Memory Usage: 16.5 MB, less than 50.00% of Python online submissions for Generalized Abbreviation.
+```python
+def generateAbbreviations(word):
+    def merge(s1,s2):
+        if not s1 or not s2:
+            return s1|s2
+        s=set()
+        for e1 in s1:
+            for e2 in s2:
+                if e1[-1].isdigit() and e2[0].isdigit():
+                    m=int(e1[-1])+int(e2[0])
+                    s.add(e1[:-1]+str(m)+e2[1:])
+                else:
+                    s.add(e1+e2)
+        return s
+    def func(w):
+        if not w:
+            return set()
+        if len(w)==1:
+            return set(['1',w])
+        i=len(w)//2
+        s1=func(w[:i])
+        s2=func(w[i:])
+        return merge(s1,s2)
+    return list(func(word))
+```
