@@ -41,3 +41,33 @@ class Solution(object):
         :rtype: List[int]
         """
 ```
+
+
+def maxNumber(nums1, nums2, k):
+    def maxArr(nums,k):
+        if len(nums)<=k: return nums
+        s=[]
+        for i in range(len(nums)):
+            while s and s[-1]<nums[i] and len(nums)-i>k-len(s):
+                s.pop()
+            if len(s)<k: s.append(nums[i])
+        return s
+
+    def greater(n1,i,n2,j):
+        if j==len(n2): return True
+        if i==len(n1): return False
+        if n1[i]>n2[j]: return True
+        if n2[j]>n1[i]: return False
+        return greater(n1,i+1,n2,j+1)
+
+    def merge(n1,n2,k):
+        ans=[0]*k
+        i=j=0
+        for r in xrange(k):
+            if greater(n1,i,n2,j):
+                ans[r]=n1[i]
+                i+=1
+            else:
+                ans[i]=n2[j]
+                j+=1
+        return ans
