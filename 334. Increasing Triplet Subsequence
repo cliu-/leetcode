@@ -1,0 +1,69 @@
+334. Increasing Triplet Subsequence
+Medium
+
+Given an unsorted array return whether an increasing subsequence of length 3 exists or not in the array.
+
+Formally the function should:
+
+Return true if there exists i, j, k
+
+such that arr[i] < arr[j] < arr[k] given 0 ≤ i < j < k ≤ n-1 else return false.
+Note: Your algorithm should run in O(n) time complexity and O(1) space complexity.
+
+Example 1:
+
+Input: [1,2,3,4,5]
+Output: true
+Example 2:
+
+Input: [5,4,3,2,1]
+Output: false
+
+
+```python
+class Solution(object):
+    def increasingTriplet(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        """
+```
+
+
+Wrong answer, this solution is looking for a `sub-array` which is satisfied the condition.
+But the problem is asking to find a `sub-subsequence`.
+```python
+def increasingTriplet(nums):
+    i=j=-1
+    for x in xrange(len(nums)):
+        if -1<i<j:
+            if x==j+1 and nums[x]>nums[j]:
+                return True
+            else:
+                i=j=-1
+        elif -1<i:
+            if x==i+1 and nums[x]>nums[i]:
+                j=x
+            else:
+                i=-1
+        if i==-1:
+            i=x
+    return False
+```
+
+
+```python
+def increasingTriplet(nums):
+    if len(nums)<3: return False
+    if len(nums)<3: return False
+    small=big=2**31
+    for n in nums:
+        if n<=small: small=n
+        elif n<=big: big=n
+        else: return True
+    return False
+
+```
+
+
+[5,1,5,5,2,5,4]
