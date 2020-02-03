@@ -43,8 +43,19 @@ class Solution(object):
 ```
 
 
+The key of solving this problem is to narrow down the problem.
+1. First simple problem, given one array of length n, create the maximum number of length k. The solution of this problem is function "max_arr".
+2. Second problem, given two array of length m and n, create maximum number of length k = m + n. There is a tricky case in this problem, "nums1=[6, 7], nums2=[6,0,4], k=5". In this case, how do we pick the first maximum element from "nums1" and "nums2"? "nums1[0]==nums2[0]==6", so we need to compare the number behind index "0", until we find the greater number. The solution of this problem is function "merge" and "greater".
+3. Now go back the original problem. How can we break the problem to #1 and #2? First, we divide the k digits required into two parts, i and k-i. We then find the maximum number of length i in one array and the maximum number of length k-i in the other array using the algorithm in section 1. Now we combine the two results in to one array using the algorithm in section 2. After that we compare the result with the result we have and keep the larger one as final answer.
+
+https://web.archive.org/web/20160120093629/http://algobox.org/create-maximum-number/
+
+Runtime: 900 ms, faster than 13.70% of Python online submissions for Create Maximum Number.
+Memory Usage: 12 MB, less than 50.00% of Python online submissions for Create Maximum Number.
+```python
 def maxNumber(nums1, nums2, k):
-    def maxArr(nums,k):
+    def max_arr(nums,k):
+        if k==0: return []
         if len(nums)<=k: return nums
         s=[]
         for i in range(len(nums)):
@@ -60,6 +71,15 @@ def maxNumber(nums1, nums2, k):
         if n2[j]>n1[i]: return False
         return greater(n1,i+1,n2,j+1)
 
+
+    # If using the iterative "greater" function, the runtime and space is 516ms.
+    # Runtime: 516 ms, faster than 46.57% of Python online submissions for Create Maximum Number.
+    # def greater(n1,i,n2,j):
+    #     while i<len(n1) and j<len(n2) and n1[i]==n2[j]:
+    #         i,j=i+1,j+1
+    #     return (j==len(n2)) or (i<len(n1) and n1[i]>=n2[j])
+
+
     def merge(n1,n2,k):
         ans=[0]*k
         i=j=0
@@ -71,3 +91,30 @@ def maxNumber(nums1, nums2, k):
                 ans[i]=n2[j]
                 j+=1
         return ans
+
+
+    ans=[]
+    i=max(0,k-len(nums2))
+    while i<=k and i<len(nums1):
+        arr=merge(max_arr(nums1,i),max_arr(nums2,k-i),k)
+        if not ans or greater(arr,0,ans,0):
+            ans=arr
+        i+=1
+    return ans
+```
+
+[3,4,6,5]
+[9,1,2,5,8,3]
+5
+[9,8,6,5,3]
+
+[6, 7]
+[6, 0, 4]
+5
+[6, 7, 6, 0, 4]
+
+
+[3, 9]
+[8, 9]
+3
+[9, 8, 9]
