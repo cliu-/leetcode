@@ -16,7 +16,8 @@ Explanation: The palindromes are ["battab","tabbat"]
 
 
 
-Runtime: O(N*k*k), where `N` is the length of `words`, and `k` is the longest word length in the `words`.
+Runtime: O(N(k**2)), where `N` is the length of `words`, and `k` is the longest word length in the `words`.
+Space: O((N+k))
 Runtime: 672 ms, faster than 42.86% of Python online submissions for Palindrome Pairs.
 Memory Usage: 16 MB, less than 10.00% of Python online submissions for Palindrome Pairs.
 ```python
