@@ -1,0 +1,78 @@
+336. Palindrome Pairs
+Hard
+
+Given a list of unique words, find all pairs of distinct indices (i, j) in the given list, so that the concatenation of the two words, i.e. words[i] + words[j] is a palindrome.
+
+Example 1:
+Input: ["abcd","dcba","lls","s","sssll"]
+Output: [[0,1],[1,0],[3,2],[2,4]] 
+Explanation: The palindromes are ["dcbaabcd","abcddcba","slls","llssssll"]
+
+
+Example 2:
+Input: ["bat","tab","cat"]
+Output: [[0,1],[1,0]] 
+Explanation: The palindromes are ["battab","tabbat"]
+
+
+
+Runtime: O(N*k*k), where `N` is the length of `words`, and `k` is the longest word length in the `words`.
+Runtime: 672 ms, faster than 42.86% of Python online submissions for Palindrome Pairs.
+Memory Usage: 16 MB, less than 10.00% of Python online submissions for Palindrome Pairs.
+```python
+class Solution(object):
+    def palindromePairs(self, words):
+        """
+        :type words: List[str]
+        :rtype: List[List[int]]
+        """
+        if len(words)<2: return []
+        def find_palindromes(t,visiting,res):
+            if not t: return
+            for k,v in t.items():
+                if k=='#': 
+                    if visiting==visiting[::-1]:
+                        res.add(v)
+                    continue
+                visiting+=k
+                find_palindromes(v,visiting,res)
+                visiting=visiting[:-1]
+
+        trie={}
+        for i,w in enumerate(words):
+            t=trie
+            for j in xrange(len(w)-1,-1,-1):
+                if w[j] not in t:
+                    t[w[j]]={}
+                t=t[w[j]]
+            t['#']=i
+        # print('trie={}'.format(trie))
+        ans=set()
+        for i,w in enumerate(words):
+            t=trie
+            j=0
+            while j<len(w):
+                if '#' in t and w[j:] and w[j:]==w[j:][::-1]:
+                    ans.add((i,t['#']))
+                if w[j] in t:
+                    t=t[w[j]]
+                    j+=1
+                else:
+                    break
+            if j==len(w):
+                p=set()
+                find_palindromes(t,'',p)
+                p.discard(i)
+                for k in p:
+                    ans.add((i,k))
+        return list(ans)
+```
+
+
+["abcd","dcba","lls","s","sssll"]
+
+["bat","tab","cat"]
+
+[ "A", "B", "BAN", "BANANA", "BAT", "LOLCAT", "MANA", "NAB", "NANA", "NOON", "ON", "TA", "TAC"]
+
+["a",""]
