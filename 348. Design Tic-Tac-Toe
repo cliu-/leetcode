@@ -54,6 +54,20 @@ Could you do better than O(n2) per move() operation?
 
 
 ```python
+def check(n,b,x,y,d1,d2):
+    count=1
+    xx,yy=x+d1[0],y+d1[1]
+    while xx>-1 and xx<n and yy>-1 and yy<n:
+        if b[xx][yy]==b[x][y]: 
+            xx,yy,count=xx+d1[0],yy+d1[1],count+1
+        else: break
+    xx,yy=x+d2[0],y+d2[1]
+    while xx>-1 and xx<n and yy>-1 and yy<n:
+        if b[xx][yy]==b[x][y]:
+             xx,yy,count=xx+d1[0],yy+d1[1],count+1
+        else: break
+    return count>=n
+
 class TicTacToe(object):
 
     def __init__(self, n):
@@ -61,7 +75,9 @@ class TicTacToe(object):
         Initialize your data structure here.
         :type n: int
         """
-        
+        self.n=n
+        self.b=[[0]*n for _ in xrange(n)]
+
 
     def move(self, row, col, player):
         """
@@ -78,10 +94,30 @@ class TicTacToe(object):
         :type player: int
         :rtype: int
         """
-        
+        self.b[row][col]=player
+        if check(self.n,self.b,row,col,(1,0),(-1,0)):
+            return player
+        if check(self.n,self.b,row,col,(0,1),(0,-1)):
+            return player
+        if check(self.n,self.b,row,col,(1,1),(-1,-1)):
+            return player
+        if check(self.n,self.b,row,col,(-1,1),(1,-1)):
+            return player
+        return 0
 
 
 # Your TicTacToe object will be instantiated and called as such:
 # obj = TicTacToe(n)
 # param_1 = obj.move(row,col,player)
 ```
+
+
+["TicTacToe","move","move","move"]
+[[2],[0,1,1],[1,1,2],[1,0,1]]
+
+["TicTacToe","move","move","move","move","move","move","move"]
+[[3],[0,0,1],[0,2,2],[2,2,1],[1,1,2],[2,0,1],[1,0,2],[2,1,1]]
+
+
+["TicTacToe","move","move","move"]
+[[3],[0,0,1],[0,1,1],[0,2,1]]
