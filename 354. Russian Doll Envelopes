@@ -50,6 +50,30 @@ def maxEnvelopes(envelopes):
 
 
 ```python
+from bisect import bisect_left
+class Solution(object):
+    def maxEnvelopes(self, envelopes):
+        """
+        :type envelopes: List[List[int]]
+        :rtype: int
+        """
+        if len(envelopes)<2: return len(envelopes)
+        e=sorted(envelopes)
+        print(e)
+        dp=[(e[0][1],e[0][0])]
+        for i in xrange(1,len(e)):
+            
+            if e[i][0]>dp[-1][0] and e[i][1]>dp[-1][1]:
+                dp.append((e[i][1],e[i][0]))
+                print('++dp={}'.format(dp))
+            elif e[i][1]<=dp[0][1]:
+                dp[0]=(e[i][1],e[i][0])
+                print('--dp={}'.format(dp))
+            else:
+                j=bisect_left(dp,e[i][1])
+                print('==j={},dp={},e={}'.format(j,dp,(e[i][1],e[i][0])))
+                dp[j]=(e[i][1],e[i][0])
+        return len(dp)
 ```
 
 
