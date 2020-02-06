@@ -53,6 +53,9 @@ Follow up:
 Could you do better than O(n2) per move() operation?
 
 
+Runtime on move() operation is O(N), Space is O(N**2)
+Runtime: 108 ms, faster than 29.89% of Python online submissions for Design Tic-Tac-Toe.
+Memory Usage: 14 MB, less than 25.00% of Python online submissions for Design Tic-Tac-Toe.
 ```python
 def check(n,b,x,y,d1,d2):
     count=1
@@ -64,7 +67,7 @@ def check(n,b,x,y,d1,d2):
     xx,yy=x+d2[0],y+d2[1]
     while xx>-1 and xx<n and yy>-1 and yy<n:
         if b[xx][yy]==b[x][y]:
-             xx,yy,count=xx+d1[0],yy+d1[1],count+1
+             xx,yy,count=xx+d2[0],yy+d2[1],count+1
         else: break
     return count>=n
 
@@ -110,6 +113,53 @@ class TicTacToe(object):
 # obj = TicTacToe(n)
 # param_1 = obj.move(row,col,player)
 ```
+
+
+Another solution, space O(N).
+I don't need to use a n*n board to track the movement, I only need to keep a count for each row and column. If at any time a row or column matches the size of the board then that player has won.
+Runtime: 76 ms, faster than 77.40% of Python online submissions for Design Tic-Tac-Toe.
+Memory Usage: 13.9 MB, less than 50.00% of Python online submissions for Design Tic-Tac-Toe.
+```python
+class TicTacToe(object):
+
+    def __init__(self, n):
+        """
+        Initialize your data structure here.
+        :type n: int
+        """
+        self.rc=[0]*n
+        self.cc=[0]*n
+        self.diag=self.anti_diag=0
+
+
+    def move(self, row, col, player):
+        """
+        Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins.
+        :type row: int
+        :type col: int
+        :type player: int
+        :rtype: int
+        """
+        n=len(self.rc)
+        a=1 if player==1 else -1
+        self.rc[row]+=a
+        self.cc[col]+=a
+        if row==col: self.diag+=a
+        if n-row-1==col: self.anti_diag+=a
+        if abs(self.rc[row])==n or abs(self.cc[col])==n or abs(self.diag)==n or abs(self.anti_diag)==n:
+            return player
+        return 0
+```
+
+["TicTacToe","move","move","move"]
+[[2],[0,0,2],[1,1,1],[0,1,2]]
 
 
 ["TicTacToe","move","move","move"]

@@ -29,3 +29,4 @@ https://cspiration.com/leetcodeClassification
 312 Divide and Conquer, DP
 322 Dynamic programming
 334 greedy
+351 Not sure why if I defined the `used` as a `set`, the answer would be wrong.
